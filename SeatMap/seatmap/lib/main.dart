@@ -36,7 +36,8 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('UCL Seat Manager', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            // show icon
+            Image.asset('assets/images/icon.jpg', width: 100, height: 100),
             SizedBox(height: 20),
             CircularProgressIndicator(),
           ],
@@ -54,7 +55,7 @@ class MainScreen extends StatelessWidget {
         title: Text('Main Screen'),
       ),
       body: Center(
-        child: Text('Welcome to UCL Seat Manager!'),
+        child: Text('Welcome to the App!'),
       ),
     );
   }
