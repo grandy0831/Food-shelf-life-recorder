@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,12 +32,13 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFA3DDEA),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             // show icon
-            Image.asset('assets/images/icon.jpg', width: 100, height: 100),
+            Image.asset('assets/images/icon.jpg', width: 250, height: 250),
             SizedBox(height: 20),
             CircularProgressIndicator(),
           ],
