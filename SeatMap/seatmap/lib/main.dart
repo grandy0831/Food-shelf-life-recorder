@@ -154,7 +154,7 @@ class _MainScreenState extends State<MainScreen> {
             title: Text(buildingName, style: TextStyle(fontWeight: FontWeight.bold)),
             subtitle: Text(address),
             trailing: IconButton(
-              icon: Icon(Icons.info_outline),
+              icon: Icon(Icons.chevron_right),
               onPressed: () {
                 // TODO: Navigate to building details page
               },
@@ -167,7 +167,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
           ListTile(
             title: Text('Click here for map'),
-            trailing: Icon(Icons.map),
+            trailing: Icon(Icons.location_on ),
             onTap: () {
               // TODO: Navigate to map screen
             },
