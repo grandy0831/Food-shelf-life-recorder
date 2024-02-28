@@ -204,10 +204,13 @@ class _MainScreenState extends State<MainScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(left: 8.0), // 在这里调整文本的缩进
+                      padding: EdgeInsets.only(left: 8.0),
                       child: Text('Click here for map', style: TextStyle(fontSize: 16)),
                     ),
-                    Icon(Icons.location_on),
+                    Padding(
+                      padding: EdgeInsets.only(right: 12.0), 
+                      child: Icon(Icons.location_on),
+                    ),
                   ],
                 ),
               ),
