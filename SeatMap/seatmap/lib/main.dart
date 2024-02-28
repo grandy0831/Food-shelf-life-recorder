@@ -130,9 +130,15 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
           ),
+          
           Expanded(
-            child: Center(
-              child: Text('Main Screen Content Goes Here'),
+            child: ListView(
+              padding: const EdgeInsets.all(8.0),
+              children: <Widget>[
+                buildCard(context, 'UCL East - One Pool Street', '1 Pool St, London E20 2AF', 'Seat availability here...', 'Map for OPS'),
+                SizedBox(height: 8),
+                buildCard(context, 'UCL East - Marshgate', '7 Sidings St, London E20 2AE', 'Seat availability here...', 'Map for Marshgate'),
+              ],
             ),
           ),
         ],
@@ -140,8 +146,41 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
+  Widget buildCard(BuildContext context, String buildingName, String address, String seatAvailability, String mapText) {
+    return Card(
+      child: Column(
+        children: <Widget>[
+          ListTile(
+            title: Text(buildingName, style: TextStyle(fontWeight: FontWeight.bold)),
+            subtitle: Text(address),
+            trailing: IconButton(
+              icon: Icon(Icons.info_outline),
+              onPressed: () {
+                // TODO: Navigate to building details page
+              },
+            ),
+          ),
+          Divider(),
+          ListTile(
+            title: Text(seatAvailability),
+            // TODO: Show actual seat availability from API
+          ),
+          ListTile(
+            title: Text('Click here for map'),
+            trailing: Icon(Icons.map),
+            onTap: () {
+              // TODO: Navigate to map screen
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+
   @override
   void dispose() {
+    _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
     super.dispose();
   }
