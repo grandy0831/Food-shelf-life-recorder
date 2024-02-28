@@ -40,7 +40,6 @@ class _SplashScreenState extends State<SplashScreen> {
             // show icon
             Image.asset('assets/images/icon.jpg', width: 250, height: 250),
             SizedBox(height: 20),
-            CircularProgressIndicator(),
           ],
         ),
       ),
@@ -48,16 +47,89 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
+  // Add listener
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  // Check for text changes
+  void _onSearchChanged() {
+    // UpdateUI
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Main Screen'),
+        title: Text(
+          'SeatMap',
+          style: TextStyle(
+            fontSize: 24.0, 
+            fontWeight: FontWeight.bold, 
+            color: Colors.white, 
+            // fontFamily: 'YourCustomFont', //字体样式
+          ),
+        ),
+        backgroundColor: Color(0xFFA3DDEA), 
       ),
-      body: Center(
-        child: Text('Welcome to the App!'),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 48.0,
+              child: TextField(
+                controller: _searchController,
+                onChanged: (value) {
+                  // Update UI
+                  setState(() {});
+                },
+                decoration: InputDecoration(
+                  hintText: 'Search...',
+                  fillColor: Colors.white,
+                  filled: true,
+                  prefixIcon: Icon(Icons.search),
+                  suffixIcon: _searchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(Icons.cancel),
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() {});
+                          },
+                        )
+                      : null,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: Text('Main Screen Content Goes Here'),
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }
