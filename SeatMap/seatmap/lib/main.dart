@@ -82,6 +82,19 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ),
         backgroundColor: Color(0xFFA3DDEA), 
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.settings),
+            color: Colors.white, 
+            onPressed: () {
+              // Jump to the Settings page
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SettingsScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -131,5 +144,19 @@ class _MainScreenState extends State<MainScreen> {
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+}
+
+class SettingsScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Settings"),
+      ),
+      body: Center(
+        child: Text("Settings Page"),
+      ),
+    );
   }
 }
