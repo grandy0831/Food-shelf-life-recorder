@@ -72,7 +72,7 @@ jobs:
         run: ls -la build/app/outputs/bundle/release/  
 
       - name: Save APK to Artifacts
-      - uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
           name: flutter-apk
           path: build/app/outputs/flutter-apk/app-release.apk
