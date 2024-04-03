@@ -1,14 +1,14 @@
 name: Flutter Build and Upload Android APK
 
-on:
+on: 
   push:                 # This is the condition that the action will run on
     branches: [ main ]  # In this case when you push your code into GitHub
     tags:
     - "v1.2.0"          # In this case when you tag your commit with v1.0.0 for example
 
-defaults:  
-  run:
-    working-directory: ./seatmap
+# defaults:  
+#   run:
+#     working-directory: ./seatmap
 
 jobs:
   build:
@@ -18,9 +18,9 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3     # Checkout the Repository on the Virtual Machine
+        uses: actions/checkout@v3
 
-      - name: Set up JDK              # Setup JAVA to build the Android APK for us
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '11'
@@ -34,9 +34,6 @@ jobs:
 
       #- name: Decode android/key.properties
       #  run: echo "${{ secrets.KEY_PROPERTIES_PROD }}" | base64 --decode > android/key.properties
-
-      - name: List files in the seatmap directory
-        run: ls -la
 
       - name: Install yq
         uses: mikefarah/yq@v4.42.1
@@ -69,26 +66,26 @@ jobs:
         run: ls -la build/app/outputs/flutter-apk/
       
       - name: List AppBundle output
-        run: ls -la build/app/outputs/bundle/release/
+        run: ls -la ./seatmap/build/app/outputs/bundle/release/
 
       - name: Save APK to Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: flutter-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: ./seatmap/build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
 
       - name: Save APPBUNDLE to Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: flutter-appbundle
-          path: build/app/outputs/bundle/release/*.aab
+          path: ./seatmap/build/app/outputs/bundle/release/*.aab
           if-no-files-found: error
           
       - name: Create Github Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/bundle/release/*.aab,build/app/outputs/flutter-apk/*.apk"
+          artifacts: "./seatmap/build/app/outputs/bundle/release/*.aab,./seatmap/build/app/outputs/flutter-apk/*.apk"
           tag: v1.2.46
           generateReleaseNotes: false
           # token: ${{ secrets.PERSONAL_RELEASE_TOKEN }}
