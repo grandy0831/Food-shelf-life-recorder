@@ -6,9 +6,9 @@ on:
     tags:
     - "v1.2.0"          # In this case when you tag your commit with v1.0.0 for example
 
-# defaults:  
-#   run:
-#     working-directory: ./seatmap
+defaults:  
+  run:
+    working-directory: ./seatmap
 
 jobs:
   build:
