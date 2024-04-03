@@ -4,7 +4,7 @@ on:
   push:                 # This is the condition that the action will run on
     branches: [ main ]  # In this case when you push your code into GitHub
     tags:
-    - "v1.2.44"          # In this case when you tag your commit with v1.0.0 for example
+    - "v1.2.0"          # In this case when you tag your commit with v1.0.0 for example
 
 defaults:  
   run:
@@ -87,7 +87,8 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "build/app/outputs/bundle/release/*.aab,build/app/outputs/flutter-apk/*.apk"
-          tag: "v${{ steps.get_flutter_app_version.outputs.TAG_VERSION }}"
+          tag: v1.2.44
+          generateReleaseNotes: false
           # token: ${{ secrets.PERSONAL_RELEASE_TOKEN }}
 
   # TODO:  Upload to Firebase - for App Distribution
