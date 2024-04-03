@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'map_screen.dart'; // 如果MapScreen在另一个文件中，确保正确导入
-import 'settings_screen.dart'; // 导入SettingsScreen，如果有跳转到设置的逻辑
+import 'map_screen.dart'; 
+import 'settings_screen.dart'; 
 
 
 class MainScreen extends StatefulWidget {
