@@ -65,6 +65,12 @@ jobs:
       - name: Build an AppBundle            # App Bundles are useful for Google Play Store
         run: flutter build appbundle --release
 
+      - name: List APK output
+        run: ls -la build/app/outputs/flutter-apk/
+      
+      - name: List AppBundle output
+        run: ls -la build/app/outputs/bundle/release/
+
       - name: Save APK to Artifacts
         uses: actions/upload-artifact@v3
         with:
