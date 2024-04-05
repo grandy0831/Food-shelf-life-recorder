@@ -9,7 +9,9 @@ class DirectionsScreen1 extends StatelessWidget {
     const double lng = -0.009428564204497315;
     final String googleMapsUrl = "https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=driving";
 
+    // ignore: deprecated_member_use
     if (await canLaunch(googleMapsUrl)) {
+      // ignore: deprecated_member_use
       await launch(googleMapsUrl);
     } else {
       throw 'Could not launch $googleMapsUrl';
@@ -55,8 +57,7 @@ class DirectionsScreen1 extends StatelessWidget {
                 icon: const Icon(Icons.directions, size: 24),
                 label: const Text('Google from here', style: TextStyle(fontSize: 20)),
                 style: ElevatedButton.styleFrom(
-                  primary: const Color.fromARGB(255, 80, 6, 119), // 设置按钮颜色为蓝色
-                  onPrimary: Colors.white, // 设置文字颜色为白色
+                  foregroundColor: Colors.white, backgroundColor: const Color.fromARGB(255, 80, 6, 119), // 设置文字颜色为白色
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
@@ -67,7 +68,7 @@ class DirectionsScreen1 extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               'Pressing "Google from here" will open Google Maps for driving directions from your current location to UCL East - OPS.',
-              style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 16), // Slightly larger text for clarity
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 16), // Slightly larger text for clarity
               textAlign: TextAlign.center, // Center align the text for consistency
             ),
           ],
