@@ -8,10 +8,12 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Your App Title',
+    return const MaterialApp(
+      title: 'SeatMap',
       home: SplashScreen(), 
     );
   }
