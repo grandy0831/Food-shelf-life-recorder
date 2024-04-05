@@ -24,7 +24,9 @@ class _OPSMapScreenState extends State<OnePoolStreetMapScreen> {
 
   Future<void> _launchURL() async {
     const url = 'https://www.ucl.ac.uk/ucl-east/ucl-east-0';
+    // ignore: deprecated_member_use
     if (await canLaunch(url)) {
+      // ignore: deprecated_member_use
       await launch(url);
     } else {
       throw 'Could not launch $url';
