@@ -31,6 +31,9 @@ jobs:
       #- name: Decode android/key.properties
       #  run: echo "${{ secrets.KEY_PROPERTIES_PROD }}" | base64 --decode > android/key.properties
 
+      - name: Set Kotlin version
+        run: echo "KOTLIN_VERSION=1.9.23" >> $GITHUB_ENV
+
       - name: Install yq
         uses: mikefarah/yq@v4.42.1
 
