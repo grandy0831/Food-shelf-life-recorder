@@ -45,8 +45,6 @@ Future<List<Building>> fetchBuildings() async {
 }
 
 
-
-
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -56,15 +54,21 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final TextEditingController _searchController = TextEditingController();
+  Future<List<Building>>? _buildingsFuture;
 
   @override
   void initState() {
     super.initState();
     _searchController.addListener(_onSearchChanged);
+    _loadBuildings();
   }
 
   void _onSearchChanged() {
     setState(() {});
+  }
+
+  void _loadBuildings() {
+    _buildingsFuture = fetchBuildings();
   }
 
   @override
@@ -135,41 +139,79 @@ class _MainScreenState extends State<MainScreen> {
               future: fetchBuildings(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Text("Error: ${snapshot.error}");
                 } else {
-
-                  final List<Building> filteredBuildings = snapshot.data!.where((building) {
-                    return building.id == 111 || building.id == 115; 
+                  final filteredBuildings = snapshot.data!.where((building) {
+                    return building.id == 111 || building.id == 115;
                   }).toList();
 
-                  return ListView.builder(
-                    itemCount: filteredBuildings.length,
-                    itemBuilder: (context, index) {
-                      final building = filteredBuildings[index];
-                      String address = "Address not available"; 
-                      return buildCard(
-                        context,
-                        building.name,
-                        address,
-                        'Available: ${building.sensorsAbsent}, Occupied: ${building.sensorsOccupied}',
-                        "Map for ${building.name}",
-                        () {}, 
-                      );
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      setState(() {
+                        _loadBuildings();
+                      });
                     },
+                    child: ListView.builder(
+                      itemCount: filteredBuildings.length,
+                      itemBuilder: (context, index) {
+                        final building = filteredBuildings[index];
+                        String address = "Address not available";
+                        if (building.id == 111) {
+                          address = "1 Pool St, London E20 2AF";
+                        } else if (building.id == 115) {
+                          address = "7 Sidings St, London E20 2AE";
+                        }
+                        return buildCard(
+                          context,
+                          building.name,
+                          address,
+                          'Available: ${building.sensorsAbsent}, Occupied: ${building.sensorsOccupied}',
+                          "Map for ${building.name}",
+                          () {
+                            if (building.id == 111) {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const OnePoolStreetMapScreen()));
+                            } else if (building.id == 115) {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const MarshgateMapScreen()));
+                            }
+                          },
+                        );
+                      },
+                    ),
                   );
                 }
               },
             ),
           ),
-
         ],
       ),
     );
   }
 
-  Widget buildCard(BuildContext context, String name, String address, String seatAvailability, String mapText, void Function() onTap) {
+  Widget buildCard(
+    BuildContext context,
+    String name, 
+    String address, 
+    String seatAvailability, 
+    String mapText, 
+    void Function() onTap) {
+
+    // Analyze seating conditions
+  final parts = seatAvailability.split(', ');
+  final available = int.parse(parts[0].split(': ')[1]);
+  final occupied = int.parse(parts[1].split(': ')[1]);
+  final total = available + occupied;
+  final double availablePercentage = available / total;
+
+  Color availabilityColor;
+  if (availablePercentage > 0.5) {
+    availabilityColor = Colors.green; 
+  } else if (availablePercentage >= 0.2) {
+    availabilityColor = Colors.yellow; 
+  } else {
+    availabilityColor = Colors.red; 
+  }
 
   String adjustedAddress = address; 
   if (name == "East Campus - Pool St") {
@@ -185,16 +227,61 @@ class _MainScreenState extends State<MainScreen> {
     adjustedBuildingName = "UCL East - Marshgate"; 
   }
 
-  // 修改 onTap 参数来添加跳转逻辑
   void Function() adjustedOnTap;
   if (adjustedBuildingName == "UCL East - One Pool Street") {
     adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const OnePoolStreetMapScreen()));
   } else if (adjustedBuildingName == "UCL East - Marshgate") {
     adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MarshgateMapScreen()));
   } else {
-    // 如果没有特定的跳转逻辑，可以选择不做任何事，或者弹出提示
     adjustedOnTap = () => print('No map available for this building');
   }
+
+
+Map<String, dynamic> getBuildingStatus(String adjustedBuildingName) {
+  final now = DateTime.now();
+  final weekday = now.weekday;
+  final hour = now.hour;
+
+  bool isOpenToday;
+  bool isOpenNow;
+  String openHours;
+  String statusText;
+
+  // Based on the name of the building and the current time, determine whether it is open today and whether it is currently open
+  switch (adjustedBuildingName) {
+    case "UCL East - One Pool Street":
+      isOpenToday = weekday >= 1 && weekday <= 6; 
+      isOpenNow = (weekday >= 1 && weekday <= 5 && hour >= 8 && hour < 19) || (weekday == 6 && hour >= 8 && hour < 16);
+      openHours = weekday >= 1 && weekday <= 5 ? "08:00 - 19:00" : weekday == 6 ? "08:00 - 16:00" : "Closed";
+      break;
+    case "UCL East - Marshgate":
+      isOpenToday = true; 
+      isOpenNow = hour >= 7 && hour < 21;
+      openHours = "07:00 - 21:00";
+      break;
+    default:
+      isOpenToday = isOpenNow = false;
+      openHours = "Closed";
+      break;
+  }
+
+  statusText = isOpenToday ? (isOpenNow ? "Open now, $openHours" : "Closed now, $openHours") : "Closed today";
+
+  return {
+    'isOpenNow': isOpenNow,
+    'isOpenToday': isOpenToday,
+    'statusText': statusText,
+    'statusBoxColor': isOpenNow ? Colors.green : Colors.grey, 
+    'statusTextColor': isOpenNow ? Colors.green : Colors.red 
+  };
+}
+
+Map<String, dynamic> status = getBuildingStatus(adjustedBuildingName);
+bool isOpenNow = status['isOpenNow'];
+bool isOpenToday = status['isOpenToday'];
+String statusText = status['statusText'];
+Color statusBoxColor = status['statusBoxColor'];
+Color statusTextColor = status['statusTextColor'];
 
 
   return Card(
@@ -235,11 +322,69 @@ class _MainScreenState extends State<MainScreen> {
             ],
           ),
           const Divider(),
-          ListTile(
-            title: Text(seatAvailability),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Row(
+              children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4), 
+            decoration: BoxDecoration(
+              color: availabilityColor,
+              borderRadius: BorderRadius.circular(8), 
+            ),
+                  child: const Text(
+                    'Seats',
+                    style: TextStyle(
+                    fontSize: 16.0, 
+                    fontWeight: FontWeight.bold, 
+                    color: Colors.white
+                    ), 
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '$available free out of $total',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
           ),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4), 
+                  decoration: BoxDecoration(
+                    color: statusBoxColor, 
+                    borderRadius: BorderRadius.circular(8), 
+                  ),
+                  child: const Text(
+                    'Status',
+                    style: TextStyle(
+                    fontSize: 16.0, 
+                    fontWeight: FontWeight.bold, 
+                    color: Colors.white
+                    ), 
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  statusText,
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: statusTextColor),
+                ),
+              ],
+            ),
+          ),
+
+          const Divider(),
           InkWell(
-            onTap: adjustedOnTap, 
+            onTap: onTap,
             child: const Padding(
               padding: EdgeInsets.symmetric(vertical: 8.0),
               child: Row(
@@ -247,7 +392,8 @@ class _MainScreenState extends State<MainScreen> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 8.0),
-                    child: Text('Click here for map', style: TextStyle(fontSize: 16)),
+                    child: Text('Click here for map', 
+                    style: TextStyle(fontSize: 16)),
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: 12.0),
@@ -271,5 +417,3 @@ class _MainScreenState extends State<MainScreen> {
     super.dispose();
   }
 }
-
-// 如果MainScreen中用到了其他自定义的小部件或逻辑，也应该将它们移动到这个文件中或适当的文件中
