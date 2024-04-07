@@ -143,8 +143,8 @@ class _MainScreenState extends State<MainScreen> {
                 } else if (snapshot.hasError) {
                   return Text("Error: ${snapshot.error}");
                 } else {
-                  final filteredBuildings = snapshot.data!.where((building) {
-                    return building.id == 111 || building.id == 115;
+                  final List<Building> filteredBuildings = snapshot.data!.where((building) {
+                    return building.id == 111 || building.id == 115; 
                   }).toList();
 
                   return RefreshIndicator(
@@ -156,26 +156,15 @@ class _MainScreenState extends State<MainScreen> {
                     child: ListView.builder(
                       itemCount: filteredBuildings.length,
                       itemBuilder: (context, index) {
-                        final building = filteredBuildings[index];
-                        String address = "Address not available";
-                        if (building.id == 111) {
-                          address = "1 Pool St, London E20 2AF";
-                        } else if (building.id == 115) {
-                          address = "7 Sidings St, London E20 2AE";
-                        }
+                      final building = filteredBuildings[index];
+                      String address = "Address not available"; 
                         return buildCard(
                           context,
                           building.name,
                           address,
                           'Available: ${building.sensorsAbsent}, Occupied: ${building.sensorsOccupied}',
                           "Map for ${building.name}",
-                          () {
-                            if (building.id == 111) {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const OnePoolStreetMapScreen()));
-                            } else if (building.id == 115) {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const MarshgateMapScreen()));
-                            }
-                          },
+                          () {},
                         );
                       },
                     ),
@@ -384,7 +373,7 @@ Color statusTextColor = status['statusTextColor'];
 
           const Divider(),
           InkWell(
-            onTap: onTap,
+            onTap: adjustedOnTap,
             child: const Padding(
               padding: EdgeInsets.symmetric(vertical: 8.0),
               child: Row(
