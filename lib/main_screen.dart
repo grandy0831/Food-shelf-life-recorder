@@ -1,7 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import 'one_pool_street_map_screen.dart'; 
 import 'marshgate_map_screen.dart'; 
-import 'settings_screen.dart'; 
+import 'settings_screen.dart';
+
+
+class Building {
+  final int id;
+  final String name;
+  final int sensorsAbsent;
+  final int sensorsOccupied;
+
+  Building({
+    required this.id,
+    required this.name,
+    required this.sensorsAbsent,
+    required this.sensorsOccupied,
+  });
+
+  factory Building.fromJson(Map<String, dynamic> json) {
+    return Building(
+      id: json['id'],
+      name: json['name'],
+      sensorsAbsent: json['sensors_absent'],
+      sensorsOccupied: json['sensors_occupied'],
+    );
+  }
+}
+
+
+Future<List<Building>> fetchBuildings() async {
+  final response = await http.get(Uri.parse('https://uclapi.com/workspaces/sensors/summary?token=uclapi-47ccfea341ed403-36900a24718217f-25f091619e58a0a-10c2964300e026b'));
+
+  if (response.statusCode == 200) {
+    Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+    List<dynamic> surveysData = decodedResponse['surveys'];
+    List<Building> buildings = surveysData.map((data) => Building.fromJson(data)).toList();
+    return buildings;
+  } else {
+    throw Exception('Failed to load buildings');
+  }
+}
+
+
 
 
 class MainScreen extends StatefulWidget {
@@ -87,112 +130,138 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
             
-            Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(8.0),
-              children: <Widget>[
-                buildCard(
-                  context, 
-                  'UCL East - One Pool Street', 
-                  '1 Pool St, London E20 2AF', 
-                  'Seat availability here...', 
-                  'Map for OPS', 
-                  () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const OnePoolStreetMapScreen()),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                buildCard(
-                  context, 
-                  'UCL East - Marshgate', 
-                  '7 Sidings St, London E20 2AE', 
-                  'Seat availability here...', 
-                  'Map for Marshgate',
-                  () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const MarshgateMapScreen()),
-                  ),
-                ),
-              ],
+          Expanded(
+            child: FutureBuilder<List<Building>>(
+              future: fetchBuildings(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Text("Error: ${snapshot.error}");
+                } else {
+
+                  final List<Building> filteredBuildings = snapshot.data!.where((building) {
+                    return building.id == 111 || building.id == 115; 
+                  }).toList();
+
+                  return ListView.builder(
+                    itemCount: filteredBuildings.length,
+                    itemBuilder: (context, index) {
+                      final building = filteredBuildings[index];
+                      String address = "Address not available"; 
+                      return buildCard(
+                        context,
+                        building.name,
+                        address,
+                        'Available: ${building.sensorsAbsent}, Occupied: ${building.sensorsOccupied}',
+                        "Map for ${building.name}",
+                        () {}, 
+                      );
+                    },
+                  );
+                }
+              },
             ),
           ),
-          ],
-        ),
-      );
-    }
 
-  Widget buildCard(BuildContext context, String buildingName, String address, String seatAvailability, String mapText, void Function() onTap) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          buildingName,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          address,
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.chevron_right),
-                  onPressed: () {
-                    // If you have specific navigation logic for the button, add it here.
-                  },
-                ),
-              ],
-            ),
-            const Divider(),
-            ListTile(
-              title: Text(seatAvailability),
-              // Add your seat availability logic here if necessary.
-            ),
-            InkWell(
-              onTap: onTap,
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 8.0),
-                      child: Text('Click here for map', style: TextStyle(fontSize: 16)),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(right: 12.0),
-                      child: Icon(Icons.location_on),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }
 
+  Widget buildCard(BuildContext context, String name, String address, String seatAvailability, String mapText, void Function() onTap) {
 
+  String adjustedAddress = address; 
+  if (name == "East Campus - Pool St") {
+    adjustedAddress = "1 Pool St, London E20 2AF"; 
+  } else if (name == "East Campus - Marshgate") {
+    adjustedAddress = "7 Sidings St, London E20 2AE"; 
+  }
+
+  String adjustedBuildingName = name; 
+  if (name == "East Campus - Pool St") {
+    adjustedBuildingName = "UCL East - One Pool Street"; 
+  } else if (name == "East Campus - Marshgate") {
+    adjustedBuildingName = "UCL East - Marshgate"; 
+  }
+
+  // 修改 onTap 参数来添加跳转逻辑
+  void Function() adjustedOnTap;
+  if (adjustedBuildingName == "UCL East - One Pool Street") {
+    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const OnePoolStreetMapScreen()));
+  } else if (adjustedBuildingName == "UCL East - Marshgate") {
+    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MarshgateMapScreen()));
+  } else {
+    // 如果没有特定的跳转逻辑，可以选择不做任何事，或者弹出提示
+    adjustedOnTap = () => print('No map available for this building');
+  }
+
+
+  return Card(
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Text(
+                        adjustedBuildingName, 
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Text(
+                        adjustedAddress, 
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.chevron_right),
+                onPressed: onTap, 
+              ),
+            ],
+          ),
+          const Divider(),
+          ListTile(
+            title: Text(seatAvailability),
+          ),
+          InkWell(
+            onTap: adjustedOnTap, 
+            child: const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: Text('Click here for map', style: TextStyle(fontSize: 16)),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 12.0),
+                    child: Icon(Icons.location_on),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
 
 
   @override
