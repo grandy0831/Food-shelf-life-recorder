@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'one_pool_street_map_screen.dart'; 
 import 'marshgate_map_screen.dart'; 
 import 'settings_screen.dart';
+import 'MarshgateFloorScreen.dart';
+import 'OnePoolStreetFloorScreen.dart';
 
 
 class Building {
@@ -164,7 +166,13 @@ class _MainScreenState extends State<MainScreen> {
                           address,
                           'Available: ${building.sensorsAbsent}, Occupied: ${building.sensorsOccupied}',
                           "Map for ${building.name}",
-                          () {},
+                          () {
+                            if (building.name == "East Campus - Pool St") {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const OnePoolStreetFloorScreen()));
+                            } else if (building.name == "East Campus - Marshgate") {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const MarshgateFloorScreen()));
+                            }  
+                          },
                         );
                       },
                     ),
@@ -333,7 +341,7 @@ Color statusTextColor = status['statusTextColor'];
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    '$available free out of $total',
+                    '$available available / $total total',
                     style: const TextStyle(fontSize: 16),
                   ),
                 ),
