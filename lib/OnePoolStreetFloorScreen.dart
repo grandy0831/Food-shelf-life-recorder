@@ -2,21 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'one_pool_street_map_screen.dart'; 
-import 'marshgate_map_screen.dart'; 
-import 'settings_screen.dart';
-import 'MarshgateFloorScreen.dart';
-import 'OnePoolStreetFloorScreen.dart';
+import 'OPS/Floor272Screen.dart'; 
+import 'OPS/Floor273Screen.dart'; 
+import 'OPS/Floor274Screen.dart'; 
+import 'OPS/Floor277Screen.dart'; 
+import 'OPS/Map272.dart'; 
+import 'OPS/Map273.dart'; 
+import 'OPS/Map274.dart'; 
+import 'OPS/Map277.dart'; 
 
 
-class Building {
+const Map<String, int> floorOrder = {
+  'Ground Floor': 0,
+  'First Floor': 1,
+  'Second Floor': 2,
+  'Third Floor': 3,
+};
+
+class Floor {
   final int id;
   final String name;
   final int sensorsAbsent;
   final int sensorsOccupied;
   final int sensorsOther;
 
-  Building({
+  Floor({
     required this.id,
     required this.name,
     required this.sensorsAbsent,
@@ -24,8 +34,8 @@ class Building {
     required this.sensorsOther,
   });
 
-  factory Building.fromJson(Map<String, dynamic> json) {
-    return Building(
+  factory Floor.fromJson(Map<String, dynamic> json) {
+    return Floor(
       id: json['id'],
       name: json['name'],
       sensorsAbsent: json['sensors_absent'],
@@ -35,146 +45,145 @@ class Building {
   }
 }
 
-
-Future<List<Building>> fetchBuildings() async {
+Future<List<Floor>> fetchOnePoolStreetFloors() async {
   final response = await http.get(Uri.parse('https://uclapi.com/workspaces/sensors/summary?token=uclapi-47ccfea341ed403-36900a24718217f-25f091619e58a0a-10c2964300e026b'));
 
   if (response.statusCode == 200) {
-    Map<String, dynamic> decodedResponse = jsonDecode(response.body);
-    List<dynamic> surveysData = decodedResponse['surveys'];
-    List<Building> buildings = surveysData.map((data) => Building.fromJson(data)).toList();
-    return buildings;
+    List<dynamic> surveysJson = jsonDecode(response.body)['surveys'];
+    // Find "East Campus - Pool St"
+    var poolStSurvey = surveysJson.firstWhere((survey) => survey['name'] == "East Campus - Pool St", orElse: () => null);
+    if (poolStSurvey != null) {
+      List<dynamic> floorsJson = poolStSurvey['maps'];
+      List<Floor> floors = floorsJson.map((json) => Floor.fromJson(json)).toList();
+      floors.sort((a, b) => floorOrder[a.name]!.compareTo(floorOrder[b.name]!));
+      return floors;
+    } else {
+      throw Exception('East Campus - Pool St not found');
+    }
   } else {
-    throw Exception('Failed to load buildings');
+    throw Exception('Failed to load floors');
   }
 }
 
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class OnePoolStreetFloorScreen extends StatefulWidget {
+  const OnePoolStreetFloorScreen({super.key});
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  _OnePoolStreetFloorScreenState createState() => _OnePoolStreetFloorScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _OnePoolStreetFloorScreenState extends State<OnePoolStreetFloorScreen> {
   final TextEditingController _searchController = TextEditingController();
-  Future<List<Building>>? _buildingsFuture;
+  Future<List<Floor>>? _floorsFuture;
 
   @override
   void initState() {
     super.initState();
     _searchController.addListener(_onSearchChanged);
-    _loadBuildings();
+    _loadFloors();
   }
 
   void _onSearchChanged() {
     setState(() {});
   }
 
-  void _loadBuildings() {
-    _buildingsFuture = fetchBuildings();
+  void _loadFloors() {
+    _floorsFuture = fetchOnePoolStreetFloors();
   }
 
   @override
-    Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'SeatMap',
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "One Pool Street Floors",
             style: TextStyle(
-              fontSize: 24.0, 
-              fontWeight: FontWeight.bold, 
-              color: Colors.white, 
-              // fontFamily: 'YourCustomFont', //字体样式
-            ),
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
-          backgroundColor: const Color.fromARGB(255, 80, 6, 119), 
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.settings),
-              color: Colors.white, 
-              onPressed: () {
-                // Jump to the Settings page
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SettingsScreen()),
-                );
-              },
-            ),
-          ],
         ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 48.0,
-                child: TextField(
-                  controller: _searchController,
-                  onChanged: (value) {
-                    // Update UI
-                    setState(() {});
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'Search...',
-                    fillColor: Colors.white,
-                    filled: true,
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: _searchController.text.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.cancel),
-                            onPressed: () {
-                              _searchController.clear();
-                              setState(() {});
-                            },
-                          )
-                        : null,
+        backgroundColor: const Color.fromARGB(255, 80, 6, 119),
+          iconTheme: const IconThemeData(
+          color: Colors.white, 
+        ),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              height: 48.0,
+              child: TextField(
+                controller: _searchController,
+                onChanged: (value) {
+                  // Trigger UI update
+                  setState(() {});
+                },
+                decoration: InputDecoration(
+                  hintText: 'Search...',
+                  fillColor: Colors.white,
+                  filled: true,
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: _searchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.cancel),
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() {});
+                          },
+                        )
+                      : null,
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide.none,
-                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide.none,
                   ),
                 ),
               ),
             ),
-            
+          ),
+          
           Expanded(
-            child: FutureBuilder<List<Building>>(
-              future: fetchBuildings(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Text("Error: ${snapshot.error}");
-                } else {
-                  final List<Building> filteredBuildings = snapshot.data!.where((building) {
-                    return building.id == 111 || building.id == 115; 
-                  }).toList();
+            child: FutureBuilder<List<Floor>>(
 
-                  return RefreshIndicator(
+            future: fetchOnePoolStreetFloors(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text("Error: ${snapshot.error}"));
+              } else {
+                final List<Floor> filteredFloors = snapshot.data!.where((floor) {
+                  return floor.id == 277 || floor.id == 273 || floor.id == 274 || floor.id == 272; 
+                }).toList();
+              
+              return RefreshIndicator(
                     onRefresh: () async {
                       setState(() {
-                        _loadBuildings();
+                        _loadFloors();
                       });
                     },
                     child: ListView.builder(
-                      itemCount: filteredBuildings.length,
+                      itemCount: filteredFloors.length,
                       itemBuilder: (context, index) {
-                      final building = filteredBuildings[index];
+                      final floor = filteredFloors[index];
                       String address = "Address not available"; 
                         return buildCard(
                           context,
-                          building.name,
+                          floor.name,
                           address,
-                          'Available: ${building.sensorsAbsent}, Occupied: ${building.sensorsOccupied}, Other: ${building.sensorsOther}',
-                          "Map for ${building.name}",
+                          'Available: ${floor.sensorsAbsent}, Occupied: ${floor.sensorsOccupied}, Other: ${floor.sensorsOther}',
+                          "Map for ${floor.name}",
                           () {
-                            if (building.name == "East Campus - Pool St") {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const OnePoolStreetFloorScreen()));
-                            } else if (building.name == "East Campus - Marshgate") {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const MarshgateFloorScreen()));
-                            }  
+                            if (floor.name == "First Floor") {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Floor272Screen()));
+                            } else if (floor.name == "Second Floor") {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => Floor273Screen()));
+                            } else if (floor.name == "Third Floor") {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const Floor274Screen()));
+                            } else if (floor.name == "Ground Floor") {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const Floor277Screen()));
+                            }
                           },
                         );
                       },
@@ -214,12 +223,7 @@ class _MainScreenState extends State<MainScreen> {
     availabilityColor = Colors.red; 
   }
 
-  String adjustedAddress = address; 
-  if (name == "East Campus - Pool St") {
-    adjustedAddress = "1 Pool St, London E20 2AF"; 
-  } else if (name == "East Campus - Marshgate") {
-    adjustedAddress = "7 Sidings St, London E20 2AE"; 
-  }
+  String adjustedAddress = "One Pool Street, E20 2AF";
 
   String adjustedBuildingName = name; 
   if (name == "East Campus - Pool St") {
@@ -229,42 +233,31 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void Function() adjustedOnTap;
-  if (adjustedBuildingName == "UCL East - One Pool Street") {
-    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const OnePoolStreetMapScreen()));
-  } else if (adjustedBuildingName == "UCL East - Marshgate") {
-    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MarshgateMapScreen()));
+  if (name == "First Floor") {
+    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map272Screen()));
+  } else if (name == "Second Floor") {
+    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map273Screen()));
+  } else if (name == "Third Floor") {
+    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map274Screen()));
+  } else if (name == "Ground Floor") {
+    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map277Screen()));
   } else {
     adjustedOnTap = () => print('No map available for this building');
   }
-
 
 Map<String, dynamic> getBuildingStatus(String adjustedBuildingName) {
   final now = DateTime.now();
   final weekday = now.weekday;
   final hour = now.hour;
 
-  bool isOpenToday;
-  bool isOpenNow;
-  String openHours;
-  String statusText;
+ bool isOpenToday = weekday >= 1 && weekday <= 6;
+  bool isOpenNow = (weekday >= 1 && weekday <= 5 && hour >= 8 && hour < 19) || 
+                   (weekday == 6 && hour >= 8 && hour < 16);
+  String openHours = isOpenToday ? (weekday <= 5 ? "08:00 - 19:00" : "08:00 - 16:00") : "Closed today";
 
-  // Based on the name of the building and the current time, determine whether it is open today and whether it is currently open
-  switch (adjustedBuildingName) {
-    case "UCL East - One Pool Street":
-      isOpenToday = weekday >= 1 && weekday <= 6; 
-      isOpenNow = (weekday >= 1 && weekday <= 5 && hour >= 8 && hour < 19) || (weekday == 6 && hour >= 8 && hour < 16);
-      openHours = weekday >= 1 && weekday <= 5 ? "08:00 - 19:00" : weekday == 6 ? "08:00 - 16:00" : "Closed";
-      break;
-    case "UCL East - Marshgate":
-      isOpenToday = true; 
-      isOpenNow = hour >= 7 && hour < 21;
-      openHours = "07:00 - 21:00";
-      break;
-    default:
-      isOpenToday = isOpenNow = false;
-      openHours = "Closed";
-      break;
-  }
+  String statusText = isOpenToday ? (isOpenNow ? "Open now, $openHours" : "Closed now, $openHours") : "Closed today";
+    Color statusBoxColor = isOpenNow ? Colors.green : Colors.grey;
+    Color statusTextColor = isOpenNow ? Colors.green : Colors.red;
 
   statusText = isOpenToday ? (isOpenNow ? "Open now, $openHours" : "Closed now, $openHours") : "Closed today";
 
@@ -283,7 +276,6 @@ bool isOpenToday = status['isOpenToday'];
 String statusText = status['statusText'];
 Color statusBoxColor = status['statusBoxColor'];
 Color statusTextColor = status['statusTextColor'];
-
 
   return Card(
     child: Padding(
@@ -393,12 +385,12 @@ Color statusTextColor = status['statusTextColor'];
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 8.0),
-                    child: Text('Click here for map', 
+                    child: Text('Show Floor Plan', 
                     style: TextStyle(fontSize: 16)),
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: 12.0),
-                    child: Icon(Icons.location_on),
+                    child: Icon(Icons.map_rounded),
                   ),
                 ],
               ),
@@ -409,7 +401,6 @@ Color statusTextColor = status['statusTextColor'];
     ),
   );
 }
-
 
   @override
   void dispose() {
