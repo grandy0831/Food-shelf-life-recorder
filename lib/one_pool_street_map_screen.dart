@@ -4,6 +4,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:seatmap/DirectionsScreen1.dart';
 import 'package:seatmap/FullScreenMapScreen1.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
+import 'favorites_model.dart';
 
 class OnePoolStreetMapScreen extends StatefulWidget {
   const OnePoolStreetMapScreen({super.key});
@@ -15,7 +17,7 @@ class OnePoolStreetMapScreen extends StatefulWidget {
 class _OPSMapScreenState extends State<OnePoolStreetMapScreen> {
   final Completer<GoogleMapController> _controller = Completer();
   final Set<Marker> _markers = {};
-  bool _isFavorited = false; 
+ bool _isFavorited = false; 
 
   static const CameraPosition _initialPosition = CameraPosition(
     target: LatLng(51.53840815618917, -0.009428564204497315),
@@ -43,7 +45,16 @@ class _OPSMapScreenState extends State<OnePoolStreetMapScreen> {
         icon: BitmapDescriptor.defaultMarker,
       ),
     );
-  }
+
+   WidgetsBinding.instance.addPostFrameCallback((_) {
+    final favorites = Provider.of<FavoritesModel>(context, listen: false);
+    final isAlreadyFavorited = favorites.favoriteBuildings.contains("UCL East - OPS");
+
+    setState(() {
+      _isFavorited = isAlreadyFavorited;
+    });
+  });
+}
 
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
@@ -67,7 +78,7 @@ class _OPSMapScreenState extends State<OnePoolStreetMapScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 80, 6, 119),
+        backgroundColor: const Color.fromARGB(255, 57, 119, 173),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
@@ -128,20 +139,31 @@ class _OPSMapScreenState extends State<OnePoolStreetMapScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: 16.0),
-                        child: Text("Add to Favourites", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: Text(
+                          _isFavorited ? "Remove from Favourites" : "Add to Favourites",
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
+                        ),
                       ),
                       IconButton(
-                        padding: EdgeInsets.zero, 
-                        constraints: const BoxConstraints(), 
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
                         icon: Icon(
-                          _isFavorited ? Icons.favorite : Icons.favorite_border,
+                          _isFavorited ? Icons.favorite_rounded : Icons.favorite_border_rounded,
                           color: _isFavorited ? Colors.red : null,
                         ),
                         onPressed: () {
+                          var favorites = Provider.of<FavoritesModel>(context, listen: false);
+
                           setState(() {
-                            _isFavorited = !_isFavorited;
+                            if (_isFavorited) {
+                              favorites.removeBuilding("UCL East - OPS");  // 移除收藏
+                              _isFavorited = false;
+                            } else {
+                              favorites.addBuilding("UCL East - OPS");  // 添加收藏
+                              _isFavorited = true;
+                            }
                           });
                         },
                       ),

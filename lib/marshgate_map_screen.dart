@@ -4,6 +4,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:seatmap/DirectionsScreen2.dart';
 import 'package:seatmap/FullScreenMapScreen2.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
+import 'favorites_model.dart';
+
 
 class MarshgateMapScreen extends StatefulWidget {
   const MarshgateMapScreen({super.key});
@@ -43,7 +46,17 @@ class _MarshgateMapScreenState extends State<MarshgateMapScreen> {
         icon: BitmapDescriptor.defaultMarker,
       ),
     );
-  }
+
+   WidgetsBinding.instance.addPostFrameCallback((_) {
+    final favorites = Provider.of<FavoritesModel>(context, listen: false);
+    final isAlreadyFavorited = favorites.favoriteBuildings.contains("UCL East - Marshgate");
+
+    setState(() {
+      _isFavorited = isAlreadyFavorited;
+    });
+  });
+}
+
 
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
@@ -67,7 +80,7 @@ class _MarshgateMapScreenState extends State<MarshgateMapScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 80, 6, 119),
+        backgroundColor: const Color.fromARGB(255, 57, 119, 173),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
@@ -128,20 +141,31 @@ class _MarshgateMapScreenState extends State<MarshgateMapScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(left: 16.0),
-                        child: Text("Add to Favourites", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: Text(
+                          _isFavorited ? "Remove from Favourites" : "Add to Favourites",
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
+                        ),
                       ),
                       IconButton(
-                        padding: EdgeInsets.zero, 
-                        constraints: const BoxConstraints(), 
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
                         icon: Icon(
-                          _isFavorited ? Icons.favorite : Icons.favorite_border,
+                          _isFavorited ? Icons.favorite_rounded : Icons.favorite_border_rounded,
                           color: _isFavorited ? Colors.red : null,
                         ),
                         onPressed: () {
+                          var favorites = Provider.of<FavoritesModel>(context, listen: false);
+
                           setState(() {
-                            _isFavorited = !_isFavorited;
+                            if (_isFavorited) {
+                              favorites.removeBuilding("UCL East - Marshgate");  
+                              _isFavorited = false;
+                            } else {
+                              favorites.addBuilding("UCL East - Marshgate");  
+                              _isFavorited = true;
+                            }
                           });
                         },
                       ),

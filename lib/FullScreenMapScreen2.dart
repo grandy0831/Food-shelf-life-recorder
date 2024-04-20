@@ -47,7 +47,7 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen2> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 80, 6, 119),
+        backgroundColor: const Color.fromARGB(255, 57, 119, 173),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),

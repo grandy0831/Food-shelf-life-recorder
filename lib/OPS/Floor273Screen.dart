@@ -158,7 +158,7 @@ class _Floor273ScreenState extends State<Floor273Screen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 80, 6, 119),
+        backgroundColor: const Color.fromARGB(255, 57, 119, 173),
           iconTheme: const IconThemeData(
           color: Colors.white, 
         ),
@@ -212,25 +212,25 @@ class _Floor273ScreenState extends State<Floor273Screen> {
                           children: [
                             Icon(
                               Icons.search_off, 
-                              size: 48.0, 
+                              size: 60.0, 
                               color: Colors.grey
                               ),
                             Text(
-                              "Oops! We couldn't find any matches.",
+                              "Oops! No matches found.",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold, 
-                                fontSize: 20,
+                                fontSize: 24,
                                 color: Color.fromARGB(255, 114, 114, 114),
                               ),
                             ),
                             Padding(
                               padding: EdgeInsets.only(top: 16.0),
                               child: Text(
-                                "Try adjusting your search to find what you're looking for.",
+                                "Try adjusting your search.",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 20,
                                   color: Color.fromARGB(255, 97, 97, 97),
                                 ),
                               ),
@@ -357,7 +357,14 @@ Color statusBoxColor = status['statusBoxColor'];
 Color statusTextColor = status['statusTextColor'];
 
 
-  return Card(
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0), 
+    child: Card(
+      elevation: 2,  
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16)  
+      ),
     child: Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -478,6 +485,7 @@ Color statusTextColor = status['statusTextColor'];
           ),
         ],
       ),
+    ),
     ),
   );
 }

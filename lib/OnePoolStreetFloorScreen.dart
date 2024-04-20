@@ -75,6 +75,7 @@ class OnePoolStreetFloorScreen extends StatefulWidget {
 
 class _OnePoolStreetFloorScreenState extends State<OnePoolStreetFloorScreen> {
   final TextEditingController _searchController = TextEditingController();
+  // ignore: unused_field
   Future<List<Floor>>? _floorsFuture;
 
   @override
@@ -103,7 +104,7 @@ class _OnePoolStreetFloorScreenState extends State<OnePoolStreetFloorScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 80, 6, 119),
+        backgroundColor: const Color.fromARGB(255, 57, 119, 173),
           iconTheme: const IconThemeData(
           color: Colors.white, 
         ),
@@ -176,9 +177,9 @@ class _OnePoolStreetFloorScreenState extends State<OnePoolStreetFloorScreen> {
                           "Map for ${floor.name}",
                           () {
                             if (floor.name == "First Floor") {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Floor272Screen()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const Floor272Screen()));
                             } else if (floor.name == "Second Floor") {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Floor273Screen()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const  Floor273Screen()));
                             } else if (floor.name == "Third Floor") {
                               Navigator.push(context, MaterialPageRoute(builder: (context) => const Floor274Screen()));
                             } else if (floor.name == "Ground Floor") {
@@ -234,7 +235,7 @@ class _OnePoolStreetFloorScreenState extends State<OnePoolStreetFloorScreen> {
 
   void Function() adjustedOnTap;
   if (name == "First Floor") {
-    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map272Screen()));
+    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => Map272Screen()));
   } else if (name == "Second Floor") {
     adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map273Screen()));
   } else if (name == "Third Floor") {
@@ -256,7 +257,9 @@ Map<String, dynamic> getBuildingStatus(String adjustedBuildingName) {
   String openHours = isOpenToday ? (weekday <= 5 ? "08:00 - 19:00" : "08:00 - 16:00") : "Closed today";
 
   String statusText = isOpenToday ? (isOpenNow ? "Open now, $openHours" : "Closed now, $openHours") : "Closed today";
+    // ignore: unused_local_variable
     Color statusBoxColor = isOpenNow ? Colors.green : Colors.grey;
+    // ignore: unused_local_variable
     Color statusTextColor = isOpenNow ? Colors.green : Colors.red;
 
   statusText = isOpenToday ? (isOpenNow ? "Open now, $openHours" : "Closed now, $openHours") : "Closed today";
@@ -271,13 +274,22 @@ Map<String, dynamic> getBuildingStatus(String adjustedBuildingName) {
 }
 
 Map<String, dynamic> status = getBuildingStatus(adjustedBuildingName);
+// ignore: unused_local_variable
 bool isOpenNow = status['isOpenNow'];
+// ignore: unused_local_variable
 bool isOpenToday = status['isOpenToday'];
 String statusText = status['statusText'];
 Color statusBoxColor = status['statusBoxColor'];
 Color statusTextColor = status['statusTextColor'];
 
-  return Card(
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0), 
+    child: Card(
+      elevation: 2,  
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16)  
+      ),
     child: Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -399,6 +411,7 @@ Color statusTextColor = status['statusTextColor'];
         ],
       ),
     ),
+  ),
   );
 }
 

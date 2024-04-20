@@ -87,6 +87,7 @@ class MarshgateFloorScreen extends StatefulWidget {
 
 class _MarshgateFloorScreenState extends State<MarshgateFloorScreen> {
   final TextEditingController _searchController = TextEditingController();
+  // ignore: unused_field
   Future<List<Floor>>? _floorsFuture;
 
   @override
@@ -116,7 +117,7 @@ class _MarshgateFloorScreenState extends State<MarshgateFloorScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 80, 6, 119),
+        backgroundColor: const Color.fromARGB(255, 57, 119, 173),
           iconTheme: const IconThemeData(
           color: Colors.white, 
         ),
@@ -318,7 +319,14 @@ String statusText = status['statusText'];
 Color statusBoxColor = status['statusBoxColor'];
 Color statusTextColor = status['statusTextColor'];
 
-  return Card(
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0), 
+    child: Card(
+      elevation: 2,  
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16)  
+      ),
     child: Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -440,6 +448,7 @@ Color statusTextColor = status['statusTextColor'];
         ],
       ),
     ),
+  ),
   );
 }
 

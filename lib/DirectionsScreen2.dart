@@ -29,7 +29,7 @@ class DirectionsScreen2 extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 80, 6, 119),
+        backgroundColor: const Color.fromARGB(255, 57, 119, 173),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
@@ -57,7 +57,7 @@ class DirectionsScreen2 extends StatelessWidget {
                 icon: const Icon(Icons.directions, size: 24),
                 label: const Text('Google from here', style: TextStyle(fontSize: 20)),
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white, backgroundColor: const Color.fromARGB(255, 80, 6, 119), // 设置文字颜色为白色
+                  foregroundColor: Colors.white, backgroundColor:const Color.fromARGB(219, 57, 78, 173), 
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
@@ -68,8 +68,8 @@ class DirectionsScreen2 extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               'Pressing "Google from here" will open Google Maps for driving directions from your current location to UCL East - Marshgate.',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 16), // Slightly larger text for clarity
-              textAlign: TextAlign.center, // Center align the text for consistency
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 16), 
+              textAlign: TextAlign.center, 
             ),
           ],
         ),

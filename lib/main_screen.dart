@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'My_favourites.dart';
 import 'one_pool_street_map_screen.dart'; 
 import 'marshgate_map_screen.dart'; 
 import 'settings_screen.dart';
 import 'MarshgateFloorScreen.dart';
 import 'OnePoolStreetFloorScreen.dart';
-
 
 class Building {
   final int id;
@@ -59,6 +59,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final TextEditingController _searchController = TextEditingController();
+  // ignore: unused_field
   Future<List<Building>>? _buildingsFuture;
 
   @override
@@ -86,12 +87,11 @@ class _MainScreenState extends State<MainScreen> {
               fontSize: 24.0, 
               fontWeight: FontWeight.bold, 
               color: Colors.white, 
-              // fontFamily: 'YourCustomFont', //字体样式
+              // fontFamily: 'YourCustomFont', 
             ),
           ),
-          backgroundColor: const Color.fromARGB(255, 80, 6, 119), 
-          actions: <Widget>[
-            IconButton(
+          backgroundColor: const Color.fromARGB(255, 57, 119, 173), 
+          leading: IconButton( 
               icon: const Icon(Icons.settings),
               color: Colors.white, 
               onPressed: () {
@@ -102,13 +102,27 @@ class _MainScreenState extends State<MainScreen> {
                 );
               },
             ),
+
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.favorite),
+              color: Colors.white, 
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyFavoritesScreen()),  
+                );
+              },
+            ),
+
+
           ],
         ),
         body: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
+              child: SizedBox(
                 height: 48.0,
                 child: TextField(
                   controller: _searchController,
@@ -278,14 +292,23 @@ Map<String, dynamic> getBuildingStatus(String adjustedBuildingName) {
 }
 
 Map<String, dynamic> status = getBuildingStatus(adjustedBuildingName);
+// ignore: unused_local_variable
 bool isOpenNow = status['isOpenNow'];
+// ignore: unused_local_variable
 bool isOpenToday = status['isOpenToday'];
 String statusText = status['statusText'];
 Color statusBoxColor = status['statusBoxColor'];
 Color statusTextColor = status['statusTextColor'];
 
 
-  return Card(
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0), 
+    child: Card(
+      elevation: 2,  
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16)  
+      ),
     child: Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -407,6 +430,7 @@ Color statusTextColor = status['statusTextColor'];
         ],
       ),
     ),
+  ),
   );
 }
 
