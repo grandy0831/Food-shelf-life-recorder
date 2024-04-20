@@ -235,9 +235,9 @@ class _OnePoolStreetFloorScreenState extends State<OnePoolStreetFloorScreen> {
 
   void Function() adjustedOnTap;
   if (name == "First Floor") {
-    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => Map272Screen()));
+    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MAP272Screen()));
   } else if (name == "Second Floor") {
-    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map273Screen()));
+    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const MAP273Screen()));
   } else if (name == "Third Floor") {
     adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map274Screen()));
   } else if (name == "Ground Floor") {

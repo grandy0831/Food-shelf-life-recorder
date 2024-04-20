@@ -23,7 +23,7 @@ class Room {
       roomType: json['description_1'] ?? 'Unknown Type', 
       totalSeats: 0,
       occupiedSeats: 0,
-      isFavorited: false, 
+      
     );
   }
 
