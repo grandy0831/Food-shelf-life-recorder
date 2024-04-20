@@ -2,21 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'Map274.dart'; //replace
-import 'Map277.dart'; //replace
-
-
 class Room {
   final String roomId;
   final String roomType; 
   int totalSeats;
   int occupiedSeats;
+  bool isFavorited;
 
   Room({
     required this.roomId,
     required this.roomType, 
     this.totalSeats = 0,
     this.occupiedSeats = 0,
+    this.isFavorited = false, 
   });
 
   factory Room.fromJson(Map<String, dynamic> json) {
@@ -25,6 +23,7 @@ class Room {
       roomType: json['description_1'] ?? 'Unknown Type', 
       totalSeats: 0,
       occupiedSeats: 0,
+      isFavorited: false, 
     );
   }
 
@@ -79,7 +78,7 @@ class _Floor272ScreenState extends State<Floor272Screen> {
   Future<List<Room>>? _roomsFuture;
   List<Room>? _allRooms; 
   bool _isLoading = true;
-
+  bool _isFavorited = false; 
 
   @override
   void initState() {
@@ -286,23 +285,6 @@ Widget buildCard(
     adjustedBuildingName = "UCL East - Marshgate"; 
   }
 
-  void Function() adjustedOnTap;
-  if (roomType == "Connected Environments") {
-    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map274Screen())); //replace
-  } else if (roomType == "Student Study Space") {
-    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map274Screen())); //replace
-  } else if (roomType == "Student Learning Hub") {
-    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map274Screen())); //replace
-  } else if (roomType == "Digital Accessibility Hub Students") {
-    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map277Screen())); //replace
-  } else if (roomType == "Digital Accessibility Hub Staff") {
-    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map274Screen())); //replace
-  } else if (roomType == "People and Nature") {
-    adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map277Screen())); //replace
-  } else {
-    adjustedOnTap = () => print('No map available for this building');
-  }
-
 
 Map<String, dynamic> getBuildingStatus(String adjustedBuildingName) {
   final now = DateTime.now();
@@ -315,9 +297,6 @@ Map<String, dynamic> getBuildingStatus(String adjustedBuildingName) {
   String openHours = isOpenToday ? (weekday <= 5 ? "08:00 - 19:00" : "08:00 - 16:00") : "Closed today";
 
   String statusText = isOpenToday ? (isOpenNow ? "Open now, $openHours" : "Closed now, $openHours") : "Closed today";
-    // Color statusBoxColor = isOpenNow ? Colors.green : Colors.grey;
-    // Color statusTextColor = isOpenNow ? Colors.green : Colors.red;
-
   statusText = isOpenToday ? (isOpenNow ? "Open now, $openHours" : "Closed now, $openHours") : "Closed today";
 
   return {
@@ -444,26 +423,33 @@ Color statusTextColor = status['statusTextColor'];
           ),
 
           const Divider(),
-          InkWell(
-            onTap: adjustedOnTap,
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 8.0),
-                    child: Text('View Room Details', 
-                    style: TextStyle(fontSize: 16)),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 12.0),
-                    child: Icon(Icons.info_outline_rounded),
-                  ),
-                ],
+          Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5.0), 
+        child: SizedBox( 
+          height: 30, 
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 8.0),
+                child: Text("Add to Favorites", style: TextStyle(fontSize: 16)),
               ),
-            ),
+              IconButton(
+                padding: const EdgeInsets.only(right: 8.0),
+                icon: Icon(
+                  _isFavorited ? Icons.favorite : Icons.favorite_border,
+                  color: _isFavorited ? Colors.red : null,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _isFavorited = !_isFavorited;
+                  });
+                },
+              ),
+            ],
           ),
+        ),
+      ),
         ],
       ),
     ),
