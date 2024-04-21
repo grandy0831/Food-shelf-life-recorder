@@ -314,10 +314,6 @@ Map<String, dynamic> getBuildingStatus(String adjustedBuildingName) {
   String openHours = "07:00 - 21:00";
 
   String statusText = isOpenNow ? "Open now, $openHours" : "Closed now, $openHours";
-  // Color statusBoxColor = isOpenNow ? Colors.green : Colors.grey;
-  // Color statusTextColor = isOpenNow ? Colors.green : Colors.red;
-
-  // statusText = isOpenToday ? (isOpenNow ? "Open now, $openHours" : "Closed now, $openHours") : "Closed today";
 
   return {
     'isOpenNow': isOpenNow,
@@ -330,8 +326,6 @@ Map<String, dynamic> getBuildingStatus(String adjustedBuildingName) {
 
 
 Map<String, dynamic> status = getBuildingStatus(adjustedBuildingName);
-// bool isOpenNow = status['isOpenNow'];
-// bool isOpenToday = status['isOpenToday'];
 String statusText = status['statusText'];
 Color statusBoxColor = status['statusBoxColor'];
 Color statusTextColor = status['statusTextColor'];
@@ -375,10 +369,6 @@ Color statusTextColor = status['statusTextColor'];
                   ],
                 ),
               ),
-              // IconButton(
-              //   icon: const Icon(Icons.chevron_right),
-              //   onPressed: onTap, 
-              // ),
             ],
           ),
           const Divider(),

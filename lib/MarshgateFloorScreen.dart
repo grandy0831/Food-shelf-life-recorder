@@ -267,21 +267,21 @@ class _MarshgateFloorScreenState extends State<MarshgateFloorScreen> {
   }
 
   void Function() adjustedOnTap;
-  if (name == "First Floor") {
+  if (name == "Floor 1") {
     adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map282Screen()));
-  } else if (name == "Second Floor") {
+  } else if (name == "Floor 2") {
     adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map294Screen()));
-  } else if (name == "Third Floor") {
+  } else if (name == "Floor 3") {
     adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map283Screen()));
-  } else if (name == "Fourth Floor") {
+  } else if (name == "Floor 4") {
     adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map286Screen()));
   } else if (name == "Fifth Floor") {
     adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map285Screen()));
-  } else if (name == "Sixth Floor") {
+  } else if (name == "Floor 6") {
     adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map288Screen()));
-  } else if (name == "Seventh Floor") {
+  } else if (name == "Floor 7") {
     adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map289Screen()));
-  } else if (name == "Eighth Floor") {
+  } else if (name == "Floor 8") {
     adjustedOnTap = () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Map287Screen()));
 
   } else {

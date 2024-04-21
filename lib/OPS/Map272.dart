@@ -3,12 +3,24 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 const Map<String, int> room = {
-  'Workspace 1': 0,
-  'Workspace 2': 1,
-  'Workspace 3': 2,
-  'Workspace 4': 3,
-  'Workspace 5': 4,
+  'Connected Environments': 0,
+  'Student Study Space': 1,
+  'Student Learning Hub ': 2,
+  'Digital Accessibility Hub Students': 3,
+  'Digital Accessibility Hub Staff': 4,
+  'People and Nature': 5,
 };
+
+
+const Map<String, Rect> workspaceAreas = {
+  'Connected Environments': Rect.fromLTWH(118, 225, 10, 10),
+  'Student Study Space': Rect.fromLTWH(118, 120, 10, 10),
+  'Student Learning Hub ': Rect.fromLTWH(158, 97, 10, 10),
+  'Digital Accessibility Hub Students': Rect.fromLTWH(220, 65, 10, 10),
+  'Digital Accessibility Hub Staff': Rect.fromLTWH(210, 90, 10, 10),
+  'People and Nature': Rect.fromLTWH(320, 60, 10, 10),
+};
+
 
 class Room {
   final String roomId;
@@ -16,7 +28,6 @@ class Room {
   int totalSeats;
   int occupiedSeats;
   bool isHighlighted;
-  Rect area;
 
   Room({
     required this.roomId,
@@ -24,42 +35,16 @@ class Room {
     this.totalSeats = 0,
     this.occupiedSeats = 0,
     this.isHighlighted = false,
-    required this.area,
   });
 
-factory Room.fromJson(Map<String, dynamic> json) {
-  // 假设你可以从 json 中获取到位置信息，或者在这里硬编码位置
-  // 下面的示例只是硬编码的示例，你需要根据实际应用场景来调整这些值
-  Rect area = Rect.fromLTWH(0, 0, 100, 50); // 默认值
-  switch (json['description_1']) {
-    case 'Workspace 1':
-      area = Rect.fromLTWH(10, 10, 100, 50);
-      break;
-    case 'Workspace 2':
-      area = Rect.fromLTWH(120, 10, 100, 50);
-      break;
-    case 'Workspace 3':
-      area = Rect.fromLTWH(230, 10, 100, 50);
-      break;
-    case 'Workspace 4':
-      area = Rect.fromLTWH(340, 10, 100, 50);
-      break;
-    case 'Workspace 5':
-      area = Rect.fromLTWH(450, 10, 100, 50);
-      break;
-    default:
-      break;
+  factory Room.fromJson(Map<String, dynamic> json) {
+    return Room(
+      roomId: json['room_id'] ?? '',
+      roomType: json['description_1'] ?? 'Unknown Type',
+      totalSeats: 0,
+      occupiedSeats: 0,
+    );
   }
-
-  return Room(
-    roomId: json['room_id'] ?? '',
-    roomType: json['description_1'] ?? 'Unknown Type',
-    totalSeats: json['total_seats'] ?? 0,
-    occupiedSeats: json['occupied_seats'] ?? 0,
-    area: area, // 现在传递实际的area值
-  );
-}
-
 
   void addSeat(bool occupied) {
     totalSeats += 1;
@@ -67,7 +52,10 @@ factory Room.fromJson(Map<String, dynamic> json) {
       occupiedSeats += 1;
     }
   }
+
+  Rect get area => workspaceAreas[roomType] ?? Rect.zero;
 }
+
 
 Future<List<Room>> fetchRoomsForFloor(String floorName) async {
   final response = await http.get(Uri.parse('https://uclapi.com/workspaces/sensors?survey_id=111&token=uclapi-47ccfea341ed403-36900a24718217f-25f091619e58a0a-10c2964300e026b'));
@@ -112,22 +100,41 @@ class MAP272Screen extends StatefulWidget {
 }
 
 class _MAP272ScreenState extends State<MAP272Screen> {
-  Future<List<Room>>? _roomsFuture;
   List<Room>? _rooms;
   bool _isLoading = true;
-  Room? _selectedRoom;
+  Room? _highlightedRoom;
+  final TransformationController _controller = TransformationController();
 
   @override
   void initState() {
     super.initState();
-    _roomsFuture = fetchRoomsForFloor("Second Floor");
-    _roomsFuture!.then((roomsLoaded) {
+    _fetchRooms();
+  }
+
+  Future<void> _fetchRooms() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final rooms = await fetchRoomsForFloor("First Floor");
       setState(() {
-        _rooms = roomsLoaded;
+        _rooms = rooms;
+        _highlightedRoom = null;  
+      });
+    } catch (e) {
+      print('Failed to load rooms: $e');
+    } finally {
+      setState(() {
         _isLoading = false;
       });
-    });
+    }
   }
+
+  void _reloadPage() {
+    _controller.value = Matrix4.identity();  
+    _fetchRooms();
+  }
+
 
 
   @override
@@ -135,65 +142,63 @@ class _MAP272ScreenState extends State<MAP272Screen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "2F - One Pool Street",
+          "1F - One Pool Street",
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
         backgroundColor: const Color.fromARGB(255, 57, 119, 173),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: _reloadPage,
+          ),
+        ],
       ),
-      body: Column(
+body: Column(
         children: [
           Expanded(
             flex: 4,
-            child: Image.asset('assets/images/OPS1F.jpg', fit: BoxFit.cover),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            width: double.infinity,
-            alignment: Alignment.center,
-            child: Text(
-              "点击卡片显示对应房间",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
+            child: InteractiveViewer(
+              transformationController: _controller,
+              boundaryMargin: const EdgeInsets.all(20.0),
+              minScale: 0.1,
+              maxScale: 4.0,
+              child: Stack(
+                children: [
+                  Image.asset('assets/images/01-one-pool-street.png', fit: BoxFit.cover),
+                  if (_highlightedRoom != null)
+                    Positioned.fromRect(
+                      rect: workspaceAreas[_highlightedRoom!.roomType]!,
+                      child: Container(
+                        color: Color.fromARGB(162, 244, 69, 69).withOpacity(0.8),
+                      ),
+                    ),
+                ],
               ),
             ),
           ),
+        Container(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          width: double.infinity,
+          alignment: Alignment.center,
+          color: Colors.grey[200],  
+          child: const Text(
+            "Tap a card to highlight a room",
+            style: TextStyle(color: Color.fromARGB(255, 58, 58, 58), fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ),
           Expanded(
             flex: 6,
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
-                : FutureBuilder<List<Room>>(
-                    future: _roomsFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done && snapshot.hasData && snapshot.data!.isNotEmpty) {
-                        return ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            Room room = snapshot.data![index];
-                            return ListTile(
-                              title: Text(room.roomType + " - Available Seats: " + (room.totalSeats - room.occupiedSeats).toString()),
-                              onTap: () {
-                                setState(() {
-                                  // Highlight this room in the image
-                                  snapshot.data!.forEach((r) => r.isHighlighted = false);
-                                  room.isHighlighted = true;
-                                });
-                              },
-                              tileColor: room.isHighlighted ? Colors.red[100] : Colors.white,
-                            );
-                          },
-                        );
-                      } else if (snapshot.connectionState == ConnectionState.done && (!snapshot.hasData || snapshot.data!.isEmpty)) {
-                        return const Center(child: Text("当前没有可用的房间。"));
-                      } else {
-                        return const SizedBox.shrink();
-                      }
+                : ListView.builder(
+                    itemCount: _rooms?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      final room = _rooms![index];
+                      return buildRoomCard(room);
                     },
                   ),
           ),
@@ -202,177 +207,76 @@ class _MAP272ScreenState extends State<MAP272Screen> {
     );
   }
 
+Widget buildRoomCard(Room room) {
+  Color availabilityColor = getAvailabilityColor(room);
+  double borderRadiusValue = 6.0;  
 
-
-
-  Widget _buildRoomList(List<Room> rooms) {
-    return RefreshIndicator(
-      onRefresh: () => fetchRoomsForFloor("Second Floor"),
-      child: ListView.builder(
-        itemCount: rooms.length,
-        itemBuilder: (context, index) {
-          final room = rooms[index];
-          return buildCard(
-            context,
-            room.roomType,
-            "One Pool Street - 2F, E20 2AF",
-            room.totalSeats - room.occupiedSeats,
-            room.totalSeats,
-            () {},
-          );
-        },
+  return Card(
+    margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+    elevation: 2,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(borderRadiusValue),  
+    ),
+    child: ListTile(
+      title: Text(
+        room.roomType,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+        ),
       ),
-    );
-  }
+      subtitle: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: Row(
+          children: [
+            Container(
+              width: 60,
+              height: 25,
+              decoration: BoxDecoration(
+                color: availabilityColor,
+                borderRadius: BorderRadius.circular(borderRadiusValue),  
+              ),
+              alignment: Alignment.center,
+              child: const Text(
+                "Seats",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                "  ${room.totalSeats - room.occupiedSeats} available / ${room.totalSeats} total",
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      onTap: () {
+        setState(() {
+          _highlightedRoom = _highlightedRoom == room ? null : room;
+        });
+      },
+      selected: _highlightedRoom == room,
+      selectedTileColor: Colors.blue[100],  
+    ),
+  );
+}
 
-  Widget buildCard(
-    BuildContext context,
-    String roomType,
-    String address,
-    int availableSeats,
-    int totalSeats,
-    void Function() onTap,
-  ) {
-    final double availablePercentage = availableSeats.toDouble() / totalSeats.toDouble();
-    Color availabilityColor;
+  Color getAvailabilityColor(Room room) {
+    final double availablePercentage = (room.totalSeats - room.occupiedSeats) / room.totalSeats;
     if (availablePercentage > 0.5) {
-      availabilityColor = Colors.green;
+      return Colors.green;
     } else if (availablePercentage >= 0.2) {
-      availabilityColor = Color.fromARGB(255, 255, 200, 0);
+      return const Color.fromARGB(255, 255, 200, 0);
     } else {
-      availabilityColor = Colors.red;
+      return Colors.red;
     }
-
-    String adjustedBuildingName = roomType;
-    if (roomType == "East Campus - Pool St") {
-      adjustedBuildingName = "UCL East - One Pool Street";
-    } else if (roomType == "East Campus - Marshgate") {
-      adjustedBuildingName = "UCL East - Marshgate";
-    }
-
-    Map<String, dynamic> getBuildingStatus(String adjustedBuildingName) {
-      final now = DateTime.now();
-      final weekday = now.weekday;
-      final hour = now.hour;
-
-      bool isOpenToday = weekday >= 1 && weekday <= 6;
-      bool isOpenNow = (weekday >= 1 && weekday <= 5 && hour >= 8 && hour < 19) ||
-                       (weekday == 6 && hour >= 8 && hour < 16);
-      String openHours = isOpenToday ? (weekday <= 5 ? "08:00 - 19:00" : "08:00 - 16:00") : "Closed today";
-
-      String statusText = isOpenToday ? (isOpenNow ? "Open now, $openHours" : "Closed now, $openHours") : "Closed today";
-
-      return {
-        'isOpenNow': isOpenNow,
-        'isOpenToday': isOpenToday,
-        'statusText': statusText,
-        'statusBoxColor': isOpenNow ? Colors.green : Colors.grey,
-        'statusTextColor': isOpenNow ? Colors.white : Colors.red
-      };
-    }
-
-    Map<String, dynamic> status = getBuildingStatus(adjustedBuildingName);
-    String statusText = status['statusText'];
-    Color statusBoxColor = status['statusBoxColor'];
-    Color statusTextColor = status['statusTextColor'];
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-      child: Card(
-        elevation: 2,
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16)
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Text(
-                            adjustedBuildingName,
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: availabilityColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text(
-                        'Seats',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        '$availableSeats available / $totalSeats total',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: statusBoxColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text(
-                        'Status',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      statusText,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: statusTextColor
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

@@ -10,13 +10,12 @@ const Map<String, int> room = {
   'Workspace 5': 4,
 };
 
-// 以下是每个工作空间在地图上的位置，这里仅为示例，你需要根据实际的地图调整
 const Map<String, Rect> workspaceAreas = {
-  'Workspace 1': Rect.fromLTWH(10, 20, 100, 50),
-  'Workspace 2': Rect.fromLTWH(120, 10, 100, 50),
-  'Workspace 3': Rect.fromLTWH(230, 10, 100, 50),
-  'Workspace 4': Rect.fromLTWH(240, 50, 60, 50),
-  'Workspace 5': Rect.fromLTWH(10, 100, 60, 50),
+  'Workspace 1': Rect.fromLTWH(118, 120, 10, 10),
+  'Workspace 2': Rect.fromLTWH(118, 215, 10, 10),
+  'Workspace 3': Rect.fromLTWH(200, 78, 10, 10),
+  'Workspace 4': Rect.fromLTWH(313, 44, 10, 10),
+  'Workspace 5': Rect.fromLTWH(283, 84, 10, 10),
 };
 
 
@@ -117,7 +116,7 @@ class _MAP273ScreenState extends State<MAP273Screen> {
       final rooms = await fetchRoomsForFloor("Second Floor");
       setState(() {
         _rooms = rooms;
-        _highlightedRoom = null;  // Ensure highlighted room is reset on data fetch
+        _highlightedRoom = null;  
       });
     } catch (e) {
       print('Failed to load rooms: $e');
@@ -129,7 +128,7 @@ class _MAP273ScreenState extends State<MAP273Screen> {
   }
 
   void _reloadPage() {
-    _controller.value = Matrix4.identity();  // 将变换控制器重置为初始状态
+    _controller.value = Matrix4.identity();  
     _fetchRooms();
   }
 
@@ -163,15 +162,15 @@ body: Column(
               transformationController: _controller,
               boundaryMargin: const EdgeInsets.all(20.0),
               minScale: 0.1,
-              maxScale: 2.0,
+              maxScale: 4.0,
               child: Stack(
                 children: [
-                  Image.asset('assets/images/OPS1F.jpg', fit: BoxFit.cover),
+                  Image.asset('assets/images/02-one-pool-street.png', fit: BoxFit.cover),
                   if (_highlightedRoom != null)
                     Positioned.fromRect(
                       rect: workspaceAreas[_highlightedRoom!.roomType]!,
                       child: Container(
-                        color: const Color.fromARGB(163, 69, 191, 244).withOpacity(0.5),
+                        color: const Color.fromARGB(162, 244, 69, 69).withOpacity(0.8),
                       ),
                     ),
                 ],
