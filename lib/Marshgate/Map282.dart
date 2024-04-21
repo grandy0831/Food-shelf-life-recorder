@@ -8,12 +8,6 @@ const Map<String, int> room = {
 };
 
 
-const Map<String, Rect> workspaceAreas = {
-  'SW Workspace': Rect.fromLTWH(100, 240, 10, 10),
-  'Computer Cluster': Rect.fromLTWH(300, 15, 10, 10),
-};
-
-
 class Room {
   final String roomId;
   final String roomType;
@@ -45,7 +39,7 @@ class Room {
     }
   }
 
-  Rect get area => workspaceAreas[roomType] ?? Rect.zero;
+  Rect getArea(Map<String, Rect> areas) => areas[roomType] ?? Rect.zero;
 }
 
 
@@ -131,6 +125,12 @@ class _Map282ScreenState extends State<Map282Screen> {
 
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
+    Map<String, Rect> workspaceAreas = {
+      'SW Workspace': Rect.fromLTWH(screenSize.width * 0.245, screenSize.height * 0.26, screenSize.width * 0.022, screenSize.height * 0.01),
+      'Computer Cluster': Rect.fromLTWH(screenSize.width * 0.695, screenSize.height * 0.017, screenSize.width * 0.022, screenSize.height * 0.01),
+    };
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -161,13 +161,14 @@ body: Column(
               child: Stack(
                 children: [
                   Image.asset('assets/images/M1.jpg', fit: BoxFit.cover),
-                  if (_highlightedRoom != null)
-                    Positioned.fromRect(
-                      rect: workspaceAreas[_highlightedRoom!.roomType]!,
-                      child: Container(
-                        color: const Color.fromARGB(162, 244, 69, 69).withOpacity(0.8),
-                      ),
-                    ),
+if (_highlightedRoom != null)
+  Positioned.fromRect(
+    rect: workspaceAreas[_highlightedRoom!.roomType] ?? Rect.zero,
+    child: Container(
+      color: const Color.fromARGB(162, 244, 69, 69).withOpacity(0.8),
+    ),
+  ),
+
                 ],
               ),
             ),
