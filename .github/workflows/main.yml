@@ -57,7 +57,7 @@ jobs:
 
       - name: Build APK Release             # Build a release
         run: flutter build apk --release
-        env: 
+        env:
           GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
           UCL_API_KEY: ${{ secrets.UCL_API_KEY }}
           
