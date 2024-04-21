@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:seatmap/api_secrets.dart';
 import 'dart:convert';
 
 import 'My_favourites.dart';
@@ -37,7 +38,8 @@ class Building {
 
 
 Future<List<Building>> fetchBuildings() async {
-  final response = await http.get(Uri.parse('https://uclapi.com/workspaces/sensors/summary?token=uclapi-47ccfea341ed403-36900a24718217f-25f091619e58a0a-10c2964300e026b'));
+  String apiKey = Secrets.UCLApiKey;
+  final response = await http.get(Uri.parse('https://uclapi.com/workspaces/sensors/summary?token=$apiKey'));
 
   if (response.statusCode == 200) {
     Map<String, dynamic> decodedResponse = jsonDecode(response.body);
@@ -98,7 +100,7 @@ class _MainScreenState extends State<MainScreen> {
                 // Jump to the Settings page
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const SettingsScreen()),
+                  MaterialPageRoute(builder: (context) => SettingsScreen()),
                 );
               },
             ),
