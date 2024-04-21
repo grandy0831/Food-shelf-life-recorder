@@ -8,11 +8,6 @@ const Map<String, int> room = {
 };
 
 
-const Map<String, Rect> workspaceAreas = {
-  'Accommodation Office': Rect.fromLTWH(118, 230, 10, 10),
-  'Centrally Bookable Teaching Space': Rect.fromLTWH(220, 78, 10, 10),
-};
-
 
 class Room {
   final String roomId;
@@ -45,7 +40,7 @@ class Room {
     }
   }
 
-  Rect get area => workspaceAreas[roomType] ?? Rect.zero;
+  Rect getArea(Map<String, Rect> areas) => areas[roomType] ?? Rect.zero;
 }
 
 
@@ -131,6 +126,12 @@ class _Map274ScreenState extends State<Map274Screen> {
 
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
+    Map<String, Rect> workspaceAreas = {
+      'Accommodation Office': Rect.fromLTWH(screenSize.width * 0.275, screenSize.height * 0.2455, screenSize.width * 0.022, screenSize.height * 0.01),
+      'Centrally Bookable Teaching Space': Rect.fromLTWH(screenSize.width * 0.495, screenSize.height * 0.085, screenSize.width * 0.022, screenSize.height * 0.01),
+    };
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(

@@ -11,14 +11,6 @@ const Map<String, int> room = {
 };
 
 
-const Map<String, Rect> workspaceAreas = {
-  'Student Study Space': Rect.fromLTWH(220, 184, 10, 10),
-  'SE Workspace': Rect.fromLTWH(335, 200, 10, 10),
-  'NE Workspace': Rect.fromLTWH(310, 15, 10, 10),
-  'SW Workspace': Rect.fromLTWH(80, 246, 10, 10),
-  'NW Workspace': Rect.fromLTWH(160, 20, 10, 10),
-};
-
 
 class Room {
   final String roomId;
@@ -51,7 +43,7 @@ class Room {
     }
   }
 
-  Rect get area => workspaceAreas[roomType] ?? Rect.zero;
+  Rect getArea(Map<String, Rect> areas) => areas[roomType] ?? Rect.zero;
 }
 
 
@@ -137,6 +129,15 @@ class _Map285ScreenState extends State<Map285Screen> {
 
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
+    Map<String, Rect> workspaceAreas = {
+      'NW Workspace': Rect.fromLTWH(screenSize.width * 0.38, screenSize.height * 0.015, screenSize.width * 0.022, screenSize.height * 0.01),
+      'SW Workspace': Rect.fromLTWH(screenSize.width * 0.18, screenSize.height * 0.26, screenSize.width * 0.022, screenSize.height * 0.01),
+      'Student Study Space': Rect.fromLTWH(screenSize.width * 0.465, screenSize.height * 0.195, screenSize.width * 0.022, screenSize.height * 0.01),
+      'SE Workspace': Rect.fromLTWH(screenSize.width * 0.78, screenSize.height * 0.23, screenSize.width * 0.022, screenSize.height * 0.01),
+      'NE Workspace': Rect.fromLTWH(screenSize.width * 0.72, screenSize.height * 0.017, screenSize.width * 0.022, screenSize.height * 0.01),
+    };
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(

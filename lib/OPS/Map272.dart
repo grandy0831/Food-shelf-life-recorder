@@ -12,15 +12,6 @@ const Map<String, int> room = {
 };
 
 
-const Map<String, Rect> workspaceAreas = {
-  'Connected Environments': Rect.fromLTWH(118, 225, 10, 10),
-  'Student Study Space': Rect.fromLTWH(118, 120, 10, 10),
-  'Student Learning Hub ': Rect.fromLTWH(158, 97, 10, 10),
-  'Digital Accessibility Hub Students': Rect.fromLTWH(220, 65, 10, 10),
-  'Digital Accessibility Hub Staff': Rect.fromLTWH(210, 90, 10, 10),
-  'People and Nature': Rect.fromLTWH(320, 60, 10, 10),
-};
-
 
 class Room {
   final String roomId;
@@ -53,7 +44,7 @@ class Room {
     }
   }
 
-  Rect get area => workspaceAreas[roomType] ?? Rect.zero;
+  Rect getArea(Map<String, Rect> areas) => areas[roomType] ?? Rect.zero;
 }
 
 
@@ -139,6 +130,16 @@ class _MAP272ScreenState extends State<MAP272Screen> {
 
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
+    Map<String, Rect> workspaceAreas = {
+      'Connected Environments': Rect.fromLTWH(screenSize.width * 0.275, screenSize.height * 0.2455, screenSize.width * 0.022, screenSize.height * 0.01),
+      'Student Study Space': Rect.fromLTWH(screenSize.width * 0.275, screenSize.height * 0.13, screenSize.width * 0.022, screenSize.height * 0.01),
+      'Student Learning Hub ': Rect.fromLTWH(screenSize.width * 0.365, screenSize.height * 0.105, screenSize.width * 0.022, screenSize.height * 0.01),
+      'Digital Accessibility Hub Students': Rect.fromLTWH(screenSize.width * 0.485, screenSize.height * 0.076, screenSize.width * 0.022, screenSize.height * 0.01),
+      'Digital Accessibility Hub Staff': Rect.fromLTWH(screenSize.width * 0.488, screenSize.height * 0.095, screenSize.width * 0.022, screenSize.height * 0.01),
+      'People and Nature': Rect.fromLTWH(screenSize.width * 0.74, screenSize.height * 0.06, screenSize.width * 0.022, screenSize.height * 0.01),
+    };
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -173,7 +174,7 @@ body: Column(
                     Positioned.fromRect(
                       rect: workspaceAreas[_highlightedRoom!.roomType]!,
                       child: Container(
-                        color: Color.fromARGB(162, 244, 69, 69).withOpacity(0.8),
+                        color: const Color.fromARGB(162, 244, 69, 69).withOpacity(0.8),
                       ),
                     ),
                 ],
