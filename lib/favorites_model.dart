@@ -43,14 +43,16 @@ class FavoritesModel extends ChangeNotifier {
       favoriteRooms.add(roomId);
     }
     prefs.setStringList('favoriteRooms', favoriteRooms);
-    _loadFavorites(); // Reload favorites after updating
+    _loadFavorites(); 
   }
 
-  void removeRoom(String roomId) {
+  void removeRoom(String roomId) async {
     _favoriteRooms.remove(roomId);
     notifyListeners();
-    _updateRoomData(); 
+    _updateRoomData();
+    await _saveFavorites('favoriteRooms', _favoriteRooms); 
   }
+
 
   void clearFavorites() async {
     _favoriteBuildings.clear();
@@ -65,8 +67,8 @@ class FavoritesModel extends ChangeNotifier {
     _favoriteRooms.clear();
     _favoriteBuildings.addAll(prefs.getStringList('favoriteBuildings') ?? []);
     _favoriteRooms.addAll(prefs.getStringList('favoriteRooms') ?? []);
+    _updateRoomData(); // Move the update call here
     notifyListeners();
-    _updateRoomData(); 
   }
 
   Future<void> _saveFavorites(String key, List<String> data) async {
@@ -77,8 +79,10 @@ class FavoritesModel extends ChangeNotifier {
   void _updateRoomData() {
     _roomData.clear();
     for (var building in _favoriteBuildings) {
-      if (roomData.containsKey(building)) {
-        _roomData[building] = roomData[building]!.where((room) => _favoriteRooms.contains(room.roomId)).toList();
+      if (_roomData.containsKey(building)) {
+        _roomData[building] = _roomData[building]!
+            .where((room) => _favoriteRooms.contains(room.roomId))
+            .toList();
       }
     }
     notifyListeners();
