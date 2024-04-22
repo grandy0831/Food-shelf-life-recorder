@@ -34,14 +34,16 @@ class FavoritesModel extends ChangeNotifier {
     }
   }
 
-  void toggleRoomFavorite(String roomId) {
-    if (_favoriteRooms.contains(roomId)) {
-      _favoriteRooms.remove(roomId);
+  void toggleRoomFavorite(String roomId) async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> favoriteRooms = prefs.getStringList('favoriteRooms') ?? [];
+    if (favoriteRooms.contains(roomId)) {
+      favoriteRooms.remove(roomId);
     } else {
-      _favoriteRooms.add(roomId);
+      favoriteRooms.add(roomId);
     }
-    notifyListeners();
-    _updateRoomData(); 
+    prefs.setStringList('favoriteRooms', favoriteRooms);
+    _loadFavorites(); // Reload favorites after updating
   }
 
   void removeRoom(String roomId) {
@@ -50,7 +52,7 @@ class FavoritesModel extends ChangeNotifier {
     _updateRoomData(); 
   }
 
-  void clearFavorites() {
+  void clearFavorites() async {
     _favoriteBuildings.clear();
     _favoriteRooms.clear();
     _roomData.clear(); 
@@ -83,7 +85,6 @@ class FavoritesModel extends ChangeNotifier {
   }
 
   void updateFavorites() {
-  notifyListeners();
+    _loadFavorites(); 
+  }
 }
-}
-
