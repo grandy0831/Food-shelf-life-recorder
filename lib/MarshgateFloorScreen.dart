@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:seatmap/api_secrets.dart';
 import 'dart:convert';
 
 import 'Marshgate/Floor282Screen.dart'; 
@@ -59,7 +60,8 @@ class Floor {
 }
 
 Future<List<Floor>> fetchMarshgateFloors() async {
-  final response = await http.get(Uri.parse('https://uclapi.com/workspaces/sensors/summary?token=uclapi-47ccfea341ed403-36900a24718217f-25f091619e58a0a-10c2964300e026b'));
+  String apiKey = Secrets.UCLApiKey;
+  final response = await http.get(Uri.parse('https://uclapi.com/workspaces/sensors/summary?token=$apiKey'));
 
   if (response.statusCode == 200) {
     List<dynamic> surveysJson = jsonDecode(response.body)['surveys'];

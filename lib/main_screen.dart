@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:seatmap/api_secrets.dart';
+import 'package:seatmap/study_space.dart';
 import 'dart:convert';
 
 import 'My_favourites.dart';
@@ -89,7 +90,6 @@ class _MainScreenState extends State<MainScreen> {
               fontSize: 24.0, 
               fontWeight: FontWeight.bold, 
               color: Colors.white, 
-              // fontFamily: 'YourCustomFont', 
             ),
           ),
           backgroundColor: const Color.fromARGB(255, 57, 119, 173), 
@@ -97,7 +97,6 @@ class _MainScreenState extends State<MainScreen> {
               icon: const Icon(Icons.settings),
               color: Colors.white, 
               onPressed: () {
-                // Jump to the Settings page
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => SettingsScreen()),
@@ -202,8 +201,28 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
-    );
-  }
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,  
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Map283Screen()),
+                );
+              },
+              icon: const Icon(Icons.search, color: Colors.white), 
+              label: const Text('Search study spaces',
+                  style: TextStyle(
+                    fontSize: 16.0, 
+                    fontWeight: FontWeight.bold, 
+                    color: Colors.white, 
+                  ),
+              ),  
+              backgroundColor: Color.fromARGB(163, 57, 119, 173),  
+              elevation: 4.0,  
+            ),
+          );
+        }
+
 
   Widget buildCard(
     BuildContext context,

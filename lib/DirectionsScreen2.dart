@@ -7,7 +7,7 @@ class DirectionsScreen2 extends StatelessWidget {
   Future<void> _launchGoogleMap() async {
     const double lat = 51.53771429982378;
     const double lng = -0.011622759963721238;
-    final String googleMapsUrl = "https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=driving";
+    const String googleMapsUrl = "https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&travelmode=driving";
 
     // ignore: deprecated_member_use
     if (await canLaunch(googleMapsUrl)) {
