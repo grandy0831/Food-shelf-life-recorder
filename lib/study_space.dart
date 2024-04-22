@@ -286,19 +286,16 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ],
         ),
-        trailing: IconButton(
-          icon: Icon(
-            isFavorite ? Icons.favorite : Icons.favorite_border,
-            color: isFavorite ? Colors.red : null,
-          ),
-          onPressed: () {
-            _toggleFavorite(roomName, favorites); 
-          },
+      trailing: IconButton(
+        icon: Icon(
+          isFavorite ? Icons.favorite : Icons.favorite_border,
+          color: isFavorite ? Colors.red : null,
         ),
-        onTap: () {
-          _toggleFavorite(roomName, favorites); 
+        onPressed: () {
+          Provider.of<FavoritesModel>(context, listen: false).toggleRoomFavorite(roomName); // Toggle room favorite
         },
       ),
+    ),
     );
   }
 
