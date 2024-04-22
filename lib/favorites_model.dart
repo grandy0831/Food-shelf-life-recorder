@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'study_space.dart'; // 导入 Room 类
+import 'study_space.dart'; 
 
 class FavoritesModel extends ChangeNotifier {
   final List<String> _favoriteBuildings = [];
   final List<String> _favoriteRooms = [];
-  Map<String, List<Room>> _roomData = {}; // 新添加的 roomData 属性
+  Map<String, List<Room>> _roomData = {}; 
 
   FavoritesModel() {
     _loadFavorites();
@@ -13,7 +13,7 @@ class FavoritesModel extends ChangeNotifier {
 
   List<String> get favoriteBuildings => List.unmodifiable(_favoriteBuildings);
   List<String> get favoriteRooms => _favoriteRooms;
-  Map<String, List<Room>> get roomData => _roomData; // 新添加的 roomData 属性的 getter
+  Map<String, List<Room>> get roomData => _roomData; 
 
   bool isRoomFavorite(String roomId) {
     return _favoriteRooms.contains(roomId);
@@ -41,17 +41,19 @@ class FavoritesModel extends ChangeNotifier {
       _favoriteRooms.add(roomId);
     }
     notifyListeners();
+    _updateRoomData(); 
   }
 
   void removeRoom(String roomId) {
     _favoriteRooms.remove(roomId);
     notifyListeners();
+    _updateRoomData(); 
   }
 
   void clearFavorites() {
     _favoriteBuildings.clear();
     _favoriteRooms.clear();
-    _roomData.clear(); // 在清除收藏时也清除房间数据
+    _roomData.clear(); 
     notifyListeners();
   }
 
@@ -62,10 +64,26 @@ class FavoritesModel extends ChangeNotifier {
     _favoriteBuildings.addAll(prefs.getStringList('favoriteBuildings') ?? []);
     _favoriteRooms.addAll(prefs.getStringList('favoriteRooms') ?? []);
     notifyListeners();
+    _updateRoomData(); 
   }
 
   Future<void> _saveFavorites(String key, List<String> data) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setStringList(key, data);
   }
+
+  void _updateRoomData() {
+    _roomData.clear();
+    for (var building in _favoriteBuildings) {
+      if (roomData.containsKey(building)) {
+        _roomData[building] = roomData[building]!.where((room) => _favoriteRooms.contains(room.roomId)).toList();
+      }
+    }
+    notifyListeners();
+  }
+
+  void updateFavorites() {
+  notifyListeners();
 }
+}
+
