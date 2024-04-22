@@ -57,7 +57,6 @@ jobs:
 
       - name: Create Config File
         run: |
-          echo "const String GOOGLE_MAPS_API_KEY = '${{ secrets.GOOGLE_MAPS_API_KEY }}',"> lib/config.dart
           echo "const String UCL_API_KEY = '${{ secretS.UCL_API_KEY }}'.">> lib/config.dart
 
       - name: Build APK Release             # Build a release
