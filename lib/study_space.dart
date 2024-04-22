@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:seatmap/api_secrets.dart';
+import 'package:shared_preferences/shared_preferences.dart'; 
 import 'favorites_model.dart';
 
 class Room {
@@ -301,9 +302,16 @@ class _MapScreenState extends State<MapScreen> {
     );
   }
 
-
-  void _toggleFavorite(String roomName, FavoritesModel favorites) {
-    favorites.toggleRoomFavorite(roomName);
+  void _toggleFavorite(String roomName, FavoritesModel favorites) async { 
+    final prefs = await SharedPreferences.getInstance();
+    List<String> favoriteRooms = prefs.getStringList('favoriteRooms') ?? [];
+    if (favoriteRooms.contains(roomName)) {
+      favoriteRooms.remove(roomName);
+    } else {
+      favoriteRooms.add(roomName);
+    }
+    prefs.setStringList('favoriteRooms', favoriteRooms);
+    favorites.updateFavorites(); 
   }
 
   String _formatFloor(String floor) {
