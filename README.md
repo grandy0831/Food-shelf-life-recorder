@@ -2,7 +2,7 @@
 
 Welcome to SeatMap, your ultimate companion for navigating the study spaces at One Pool Street and Marshgate teaching buildings within the UCL campus. Whether you're amidst a bustling exam period or seeking a serene spot for focused studying, SeatMap is here to streamline your search and enhance your studying experience.
 
-## Website: [Login Page]([https://seatmap.my.canva.site/real-time-seating-navigation-companion])
+## Website: [Login Page](https://seatmap.my.canva.site/real-time-seating-navigation-companion)
 
 ### About SeatMap
 SeatMap is tailored specifically for UCL students and staff, providing an efficient solution for locating and managing seating within campus learning environments. With real-time seating availability updates and intuitive navigation features, SeatMap simplifies the process of finding your ideal study space.
@@ -37,6 +37,7 @@ Ensure that you have the following software installed:
 
 #### Clone Repository
 1. Clone the repository to your local machine:
+
 
 
 
