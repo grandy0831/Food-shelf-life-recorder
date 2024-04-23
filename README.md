@@ -79,5 +79,5 @@ dev_dependencies:
 
 ##  Contact Details
 
-Guandi Chen
+Guandi Chen,
 Email: zczqgch@ucl.ac.uk
