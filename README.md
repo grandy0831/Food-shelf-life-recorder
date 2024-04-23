@@ -29,7 +29,7 @@ SeatMap is tailored specifically for UCL students and staff, providing an effici
 <img src="https://github.com/grandy0831/SeatMap/assets/140076679/ad4d187f-6be9-4c98-b7f5-f7061e7a557e" width="200"/>
 
 ## Video Showcase
-https://github.com/grandy0831/SeatMap/assets/140076679/6623a4ac-dbd3-41ee-bd9d-ceb62d2541cc
+[https://github.com/grandy0831/SeatMap/assets/140076679/6623a4ac-dbd3-41ee-bd9d-ceb62d2541cc](https://youtu.be/H6yJQBtaLXs)
 
 
 
