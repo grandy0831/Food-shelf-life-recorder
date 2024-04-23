@@ -19,14 +19,14 @@ SeatMap is tailored specifically for UCL students and staff, providing an effici
 
 
 ## App Page Showcase
-![8](https://github.com/grandy0831/SeatMap/assets/140076679/a398da01-9fa0-435f-863c-6b96a5a748d0)
-![9](https://github.com/grandy0831/SeatMap/assets/140076679/9a843dea-946a-4997-85f6-4b835c7c5d5d)
-![3](https://github.com/grandy0831/SeatMap/assets/140076679/d01a0cc6-ca77-4127-b369-7c2b22575b1d)
-![5](https://github.com/grandy0831/SeatMap/assets/140076679/64125019-535f-4f9c-8cd8-5fa72af01e0d)
-![1](https://github.com/grandy0831/SeatMap/assets/140076679/63486bfb-bdd8-4eb8-8953-939fafbf2ba0)
-![11](https://github.com/grandy0831/SeatMap/assets/140076679/2ac5dd99-40a1-4332-aca6-cde1f04d5e1a)
-![14](https://github.com/grandy0831/SeatMap/assets/140076679/bf65f0d0-6870-4fdb-a1d5-bc4b75eabac2)
-![2](https://github.com/grandy0831/SeatMap/assets/140076679/ad4d187f-6be9-4c98-b7f5-f7061e7a557e)
+<img src="https://github.com/grandy0831/SeatMap/assets/140076679/a398da01-9fa0-435f-863c-6b96a5a748d0" width="200"/>
+<img src="https://github.com/grandy0831/SeatMap/assets/140076679/9a843dea-946a-4997-85f6-4b835c7c5d5d" width="200"/>
+<img src="https://github.com/grandy0831/SeatMap/assets/140076679/d01a0cc6-ca77-4127-b369-7c2b22575b1d" width="200"/>
+<img src="https://github.com/grandy0831/SeatMap/assets/140076679/64125019-535f-4f9c-8cd8-5fa72af01e0d" width="200"/>
+<img src="https://github.com/grandy0831/SeatMap/assets/140076679/63486bfb-bdd8-4eb8-8953-939fafbf2ba0" width="200"/>
+<img src="https://github.com/grandy0831/SeatMap/assets/140076679/2ac5dd99-40a1-4332-aca6-cde1f04d5e1a" width="200"/>
+<img src="https://github.com/grandy0831/SeatMap/assets/140076679/bf65f0d0-6870-4fdb-a1d5-bc4b75eabac2" width="200"/>
+<img src="https://github.com/grandy0831/SeatMap/assets/140076679/ad4d187f-6be9-4c98-b7f5-f7061e7a557e" width="200"/>
 
 
 
