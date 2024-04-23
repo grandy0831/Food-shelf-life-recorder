@@ -29,6 +29,8 @@ SeatMap is tailored specifically for UCL students and staff, providing an effici
 <img src="https://github.com/grandy0831/SeatMap/assets/140076679/ad4d187f-6be9-4c98-b7f5-f7061e7a557e" width="200"/>
 
 ## Video Showcase
+https://github.com/grandy0831/SeatMap/assets/140076679/6623a4ac-dbd3-41ee-bd9d-ceb62d2541cc
+
 
 
 ## Installation
@@ -42,8 +44,9 @@ Ensure that you have the following software installed:
 - Suitable Android or iOS device or emulator
 
 ### Clone Repository
-1. Clone the repository to your local machine:
-
+1. Clone the repository to your local machine: `git clone https://github.com/grandy0831/SeatMap.git`
+2. Navigate to the project directory: `cd SeatMap`
+3. Install dependencies: `flutter pub get`
 
 
 
