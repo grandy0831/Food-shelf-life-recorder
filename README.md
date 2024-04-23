@@ -44,15 +44,38 @@ Ensure that you have the following software installed:
 - Suitable Android or iOS device or emulator
 
 ### Clone Repository
-1. Clone the repository to your local machine: `git clone https://github.com/grandy0831/SeatMap.git`
-2. Navigate to the project directory: `cd SeatMap`
-3. Install dependencies: `flutter pub get`
+1. Clone the repository to your local machine: ```git clone https://github.com/grandy0831/SeatMap.git```
+2. Navigate to the project directory: ```cd SeatMap```
+3. Install dependencies: ```flutter pub get```
+4. Run the app: ```flutter run```
 
+## Dependencies
+Make sure these versions of the plugin are included in your pubspec.yaml file to avoid compatibility issues:
 
+```
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  flutter_polyline_points: ^2.0.0
+  google_maps_flutter: ^2.1.7
+  location: ^6.0.1
+  flutter_svg: ^2.0.10+1
+  url_launcher: ^6.0.9
+  http: ^1.2.0
+  webview_flutter: ^2.0.13
+  provider: ^6.0.0
+  shared_preferences: ^2.0.6
+  package_info_plus: ^5.0.1
+  connectivity: ^3.0.6
+  flutter_test:
+    sdk: flutter
 
-## Include A Section That Tells Developers How To Install The App
+dev_dependencies:
+  flutter_launcher_icons: "^0.9.2"
+  flutter_lints: ^3.0.2
+```
 
-Include a section that gives intructions on how to install the app or run it in Flutter.  What versions of the plugins are you assuming?  Maybe define a licence
 
 ##  Contact Details
 
