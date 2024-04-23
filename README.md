@@ -28,15 +28,12 @@ SeatMap is tailored specifically for UCL students and staff, providing an effici
 <img src="https://github.com/grandy0831/SeatMap/assets/140076679/bf65f0d0-6870-4fdb-a1d5-bc4b75eabac2" width="200"/>
 <img src="https://github.com/grandy0831/SeatMap/assets/140076679/ad4d187f-6be9-4c98-b7f5-f7061e7a557e" width="200"/>
 
+## Video Showcase
 
 
+## Installation
 
-
-[Video Showcase]
-
-### Installation
-
-#### Prerequisites
+### Prerequisites
 Ensure that you have the following software installed:
 
 - Flutter SDK (version 3.0 or higher)
@@ -44,7 +41,7 @@ Ensure that you have the following software installed:
 - Android Studio or Visual Studio Code with Flutter plugin
 - Suitable Android or iOS device or emulator
 
-#### Clone Repository
+### Clone Repository
 1. Clone the repository to your local machine:
 
 
