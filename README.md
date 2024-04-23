@@ -1,47 +1,43 @@
 # SeatMap: Find the Best Study Spaces Quickly!
 
-Whether it’s a busy exam period or a calm day meant for studying, we help you accurately find available seats at One Pool Street and Marshgate teaching buildings. Choose SeatMap and easily choose your study space.
+Welcome to SeatMap, your ultimate companion for navigating the study spaces at One Pool Street and Marshgate teaching buildings within the UCL campus. Whether you're amidst a bustling exam period or seeking a serene spot for focused studying, SeatMap is here to streamline your search and enhance your studying experience.
 
-Website: [Login Page (Link)]([link_to_login_page](https://seatmap.my.canva.site/real-time-seating-navigation-companion))
-About SeatMap
+## Website: [Login Page]([https://seatmap.my.canva.site/real-time-seating-navigation-companion])
 
-SeatMap is specifically designed for UCL students and staff to efficiently find and manage seating within campus learning spaces, providing real-time seating availability and navigational assistance.
+### About SeatMap
+SeatMap is tailored specifically for UCL students and staff, providing an efficient solution for locating and managing seating within campus learning environments. With real-time seating availability updates and intuitive navigation features, SeatMap simplifies the process of finding your ideal study space.
 
-## Features
+### Features
 
-### Real-Time Seat Monitoring
+1. **Real-Time Seat Monitoring**  
+   Stay updated with up-to-the-minute seat occupancy information. Our sensor technology ensures the most accurate data on available spots, allowing you to make informed decisions quickly.
 
-Up-to-the-minute seat occupancy updates at a glance. With our sensor technology, you're assured the most accurate information on which spots are free.
+2. **Intuitive Building and Floor Navigation**  
+   Beyond just seats, SeatMap offers detailed insights into teaching buildings and floor plans. Discover opening hours, specific locations, and more with just a few clicks, simplifying your journey to the perfect study spot.
 
-### Intuitive Building and Floor Navigation
+3. **Quick Search**  
+   Easily locate classrooms by name or select your preferred rooms to check current seating availability, minimizing the time spent searching for a suitable study space.
 
-More than just seats, we offer detailed information on teaching buildings and floor plans, including opening hours and specific locations, all accessible with just a few clicks.
+4. **Personalized Favorites**  
+   Save your frequently visited buildings or specific rooms as favorites, enabling effortless revisits and enhancing your overall experience with SeatMap.
 
-### Quick Search
+## App Page Showcase
 
-Simply enter a classroom name or select your favored rooms to view the current seating status.
+[Video Showcase]
 
-### Personalized Favorites
+### Installation
 
-Save your frequently visited buildings or specific rooms to revisit them effortlessly.
+#### Prerequisites
+Ensure that you have the following software installed:
 
-## App Page Display
+- Flutter SDK (version 3.0 or higher)
+- Dart (version 2.18 or higher)
+- Android Studio or Visual Studio Code with Flutter plugin
+- Suitable Android or iOS device or emulator
 
-[Video Demo](link_to_video_demo)
+#### Clone Repository
+1. Clone the repository to your local machine:
 
-## Installation
-
-### Prerequisites
-
-Make sure you have the following software installed:
-1. Flutter SDK (3.0 or higher)
-2. Dart (2.18 or higher)
-3. Android Studio or Visual Studio Code with Flutter plugin
-4. Suitable Android or iOS device or emulator
-
-### Clone Repository
-
-First, clone the repository to your local machine:
 
 
 ## Include A Section That Tells Developers How To Install The App
