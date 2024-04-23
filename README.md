@@ -1,18 +1,35 @@
-# SeatMap
+# SeatMap: Find the Best Study Spaces Quickly!
 
+**SeatMap** is specifically designed for UCL students and staff to efficiently find and manage seating within campus learning spaces, providing real-time seating availability and navigational assistance.
 
-This is the Final assessment template for CASA0014 - Please use this template and edit the relevant sections to personalise.
-This section has a short introduction to what the application is
+## Features
 
-## Use this README File 
+### Real-Time Seat Monitoring
+- Up-to-the-minute seat occupancy updates at a glance. With our sensor technology, you're assured the most accurate information on which spots are free.
 
-Use this section to show us what your Mobile App is about.   Include a Screenshot to the App, link to the various frameworks you've used. Include your presentation video here that shows off your Mobile App.   Emojis are also fun to include 📱 😄
+### Intuitive Building and Floor Navigation
+- More than just seats, we offer detailed information on teaching buildings and floor plans, including opening hours and specific locations, all accessible with just a few clicks.
 
-Look at some other Flutter Apps online and see how they use there README File.  Good examples are:
+### Quick Search
+- Simply enter a classroom name or select your favored rooms to view the current seating status.
 
-- https://github.com/miickel/flutter_particle_clock
-- https://github.com/Tarikul711/flutter-food-delivery-app-ui    
-- https://github.com/mohak1283/Instagram-Clone
+### Personalized Favorites
+- Save your frequently visited buildings or specific rooms to revisit them effortlessly.
+
+## Installation
+
+Ensure you have the following prerequisites installed:
+- Flutter SDK (3.0 or higher)
+- Dart (2.18 or higher)
+- Android Studio or Visual Studio Code with Flutter plugin
+- A suitable Android or iOS device or emulator
+
+### Setup Instructions
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/grandy0831/SeatMap.git
+   cd SeatMap
 
 
 ## Include A Section That Tells Developers How To Install The App
