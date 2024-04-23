@@ -24,7 +24,7 @@ In addition to real-time seat monitoring, SeatMap also allows users to mark freq
 
 ## Biblography
 
-1. Reference listFlutter (2024a). google_maps_flutter | Flutter Package. [online] Dart packages. Available at: https://pub.dev/packages/google_maps_flutter [Accessed 22 Apr. 2024].
+1. Flutter (2024a). google_maps_flutter | Flutter Package. [online] Dart packages. Available at: https://pub.dev/packages/google_maps_flutter [Accessed 22 Apr. 2024].
 
 2. Flutter (2024b). shared_preferences | Flutter Package. [online] Dart packages. Available at: https://pub.dev/packages/shared_preferences [Accessed 22 Apr. 2024].
 
