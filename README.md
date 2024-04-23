@@ -10,16 +10,17 @@ SeatMap is tailored specifically for UCL students and staff, providing an effici
 ### Features
 
 1. **Real-Time Seat Monitoring**  
-   Stay updated with up-to-the-minute seat occupancy information. Our sensor technology ensures the most accurate data on available spots, allowing you to make informed decisions quickly.
+   ![Seat Monitoring Icon](https://example.com/seat-monitoring-icon.png) Stay updated with up-to-the-minute seat occupancy information. Our sensor technology ensures the most accurate data on available spots, allowing you to make informed decisions quickly.
 
 2. **Intuitive Building and Floor Navigation**  
-   Beyond just seats, SeatMap offers detailed insights into teaching buildings and floor plans. Discover opening hours, specific locations, and more with just a few clicks, simplifying your journey to the perfect study spot.
+   ![Navigation Icon](https://example.com/navigation-icon.png) Beyond just seats, SeatMap offers detailed insights into teaching buildings and floor plans. Discover opening hours, specific locations, and more with just a few clicks, simplifying your journey to the perfect study spot.
 
 3. **Quick Search**  
-   Easily locate classrooms by name or select your preferred rooms to check current seating availability, minimizing the time spent searching for a suitable study space.
+   ![Search Icon](https://example.com/search-icon.png) Easily locate classrooms by name or select your preferred rooms to check current seating availability, minimizing the time spent searching for a suitable study space.
 
 4. **Personalized Favorites**  
-   Save your frequently visited buildings or specific rooms as favorites, enabling effortless revisits and enhancing your overall experience with SeatMap.
+   ![Favorites Icon](https://example.com/favorites-icon.png) Save your frequently visited buildings or specific rooms as favorites, enabling effortless revisits and enhancing your overall experience with SeatMap.
+
 
 ## App Page Showcase
 
