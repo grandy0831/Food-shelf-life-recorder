@@ -24,11 +24,13 @@ In addition to real-time seat monitoring, SeatMap also allows users to mark freq
 
 ## Biblography
 
-1. Last name, First initial. (Year published). Title. Edition. (Only include the edition if it is not the first edition) City published: Publisher, Page(s). <http://google.com>
+1. Reference listFlutter (2024a). google_maps_flutter | Flutter Package. [online] Dart packages. Available at: https://pub.dev/packages/google_maps_flutter [Accessed 22 Apr. 2024].
 
-2. Last name, First initial. (Year published). Title. Edition. (Only include the edition if it is not the first edition) City published: Publisher, Page(s).  <http://google.com>
+2. Flutter (2024b). shared_preferences | Flutter Package. [online] Dart packages. Available at: https://pub.dev/packages/shared_preferences [Accessed 22 Apr. 2024].
 
-----
+3. OpenAI (2024). ChatGPT conversation on Flutter Application. [online] OpenAI. Available at: https://www.openai.com/ [Accessed 22 Apr. 2024].
+
+4. The Flutter Way (2023). Flutter Google Map With Live Location Tracking. [online] www.youtube.com. Available at: https://www.youtube.com/watch?v=B9hsWOCXb_o&t=35s [Accessed 22 Apr. 2024].
 
 ## Declaration of Authorship
 
