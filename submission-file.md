@@ -11,6 +11,7 @@ date: "22 Apr 2024"
 ## Link to GitHub Repository
 
 Flutter Application Name - SeatMap
+
 GitHub Repository - [https://github.com/grandy0831/SeatMap](https://github.com/grandy0831/SeatMap)
 
 ## Introduction to Application
@@ -31,9 +32,9 @@ In addition to real-time seat monitoring, SeatMap also allows users to mark freq
 
 ## Declaration of Authorship
 
-We, AUTHORS NAME HERE, confirm that the work presented in this assessment is my own. Where information has been derived from other sources, I confirm that this has been indicated in the work.
+I, Guandi Chen, confirm that the work presented in this assessment is my own. Where information has been derived from other sources, I confirm that this has been indicated in the work.
 
 
-Digitally Sign with Your name Here
+Guandi Chen
 
-ASSESSMENT DATE
+23 Apr 2024
